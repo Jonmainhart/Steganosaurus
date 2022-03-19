@@ -1,0 +1,35 @@
+Proposed file structure of the project
+
+Steganosaurus/
+|
+|__ images/
+|   |__ uncoded_image_1.jpeg
+|   |__ uncoded_image_2.jpeg
+|   |__ coded_image_1.jpeg
+|   |__ coded_image_2.jpeg
+|
+|__ steganosaurus/
+|   |__ __main__.py
+|   |__ stego.py
+|   |__ file_utils.py
+|   |__ message_utils.py
+|
+|__ requirements.txt
+
+The images/ folder will contain at least two un-encoded test images and two test images which contain a coded message.
+
+The steganosaurus/ folder will contain the main application files.
+- __main__.py is the file which will start the application.
+- stego.py will contain all GUI code.
+- file_utils.py will contain all file read/write functions.
+- message_utils.py will contain all message encoding/decoding functions.
+
+The requirements.txt file will enumerate all required packages needed to run the application.
+
+Your dev environment will need to be set up to include the required imports. You can use an virtual environment for this if you choose to keep things tidy on your system. Otherwise, you can install them as normal using pip.
+
+Recommended imports (purpose in parenthesis):
+import kivy (GUI framework)
+from PIL import Image (Extract/modify image pixels)
+
+Recommend everyone install Bandit, PyLint, and SonarLint to check your code before you submit it for review. 
