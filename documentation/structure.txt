@@ -2,6 +2,10 @@ Proposed file structure of the project
 
 Steganosaurus/
 |
+|
+|__ assets/
+|   |__ icon.png
+|
 |__ images/
 |   |__ uncoded_image_1.jpeg
 |   |__ uncoded_image_2.jpeg
@@ -15,6 +19,8 @@ Steganosaurus/
 |   |__ message_utils.py
 |
 |__ requirements.txt
+
+The assets/ folder will contain icon images and any other graphics used to enhance the look and feel of the application. We may or may not decide to skin the application to make it look nicer than the stock kivy GUI elements.
 
 The images/ folder will contain at least two un-encoded test images and two test images which contain a coded message.
 
