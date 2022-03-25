@@ -8,21 +8,18 @@ from tkinter.filedialog import askopenfilename
     the main GUI application """
 
 def open_image_file():
-	"""opens file exploer on user's machine to select
-		image to be encoded
-		throws an error which is a dialog box
-		letting the user know that the file chosen
-        is of an invalid format"""
+	"""	- opens file explorer on user's machine to select
+		  image to be encoded
+
+		- throws an error which is a dialog box
+		  letting the user know that the file chosen
+          is of an invalid format
+
+		- takes no input"""
 	
 	try:
-		#image_file = askopenfilename()
-		# PIL stuff
-		# open method used to open different extension image file
+		# opens user's file explorer
 		im = Image.open(askopenfilename())
-		
-		# loads pixel data that is needed to extract bits and encode/decode message
-		PIL.Image.Image.load(im)
-	
 	
 		# This method will show image in any image viewer
 		im.show()
@@ -35,4 +32,5 @@ def open_image_file():
 		                          "one of these image extensions:\n"
 		                          ".png, .jpg, .JPEG, .svg, .webp", )
 
+# call the function 
 open_image_file()
