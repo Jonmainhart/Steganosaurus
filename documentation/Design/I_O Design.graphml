@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--Created by yFiles for HTML 2.5-alpha-->
+<graphml xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://www.yworks.com/xml/schema/graphml.html/2.0/ygraphml.xsd " xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:demostyle2="http://www.yworks.com/yFilesHTML/demos/FlatDemoStyle/2.0" xmlns:demostyle="http://www.yworks.com/yFilesHTML/demos/FlatDemoStyle/1.0" xmlns:icon-style="http://www.yworks.com/yed-live/icon-style/1.0" xmlns:bpmn="http://www.yworks.com/xml/yfiles-bpmn/2.0" xmlns:demotablestyle="http://www.yworks.com/yFilesHTML/demos/FlatDemoTableStyle/1.0" xmlns:uml="http://www.yworks.com/yFilesHTML/demos/UMLDemoStyle/1.0" xmlns:GraphvizNodeStyle="http://www.yworks.com/yFilesHTML/graphviz-node-style/1.0" xmlns:VuejsNodeStyle="http://www.yworks.com/demos/yfiles-vuejs-node-style/1.0" xmlns:explorer-style="http://www.yworks.com/data-explorer/1.0" xmlns:y="http://www.yworks.com/xml/yfiles-common/3.0" xmlns:x="http://www.yworks.com/xml/yfiles-common/markup/3.0" xmlns:sys="http://www.yworks.com/xml/yfiles-common/markup/primitives/2.0" xmlns:yjs="http://www.yworks.com/xml/yfiles-for-html/2.0/xaml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<key id="d0" for="node" attr.type="int" attr.name="zOrder" y:attr.uri="http://www.yworks.com/xml/yfiles-z-order/1.0/zOrder"/>
+	<key id="d1" for="node" attr.type="boolean" attr.name="Expanded" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/folding/Expanded">
+		<default>true</default>
+	</key>
+	<key id="d2" for="node" attr.type="string" attr.name="url"/>
+	<key id="d3" for="node" attr.type="string" attr.name="description"/>
+	<key id="d4" for="node" attr.name="NodeLabels" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/NodeLabels"/>
+	<key id="d5" for="node" attr.name="NodeGeometry" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/NodeGeometry"/>
+	<key id="d6" for="all" attr.name="UserTags" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/UserTags"/>
+	<key id="d7" for="node" attr.name="NodeStyle" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/NodeStyle"/>
+	<key id="d8" for="node" attr.name="NodeViewState" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/folding/1.1/NodeViewState"/>
+	<key id="d9" for="edge" attr.type="string" attr.name="url"/>
+	<key id="d10" for="edge" attr.type="string" attr.name="description"/>
+	<key id="d11" for="edge" attr.name="EdgeLabels" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/EdgeLabels"/>
+	<key id="d12" for="edge" attr.name="EdgeGeometry" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/EdgeGeometry"/>
+	<key id="d13" for="edge" attr.name="EdgeStyle" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/EdgeStyle"/>
+	<key id="d14" for="edge" attr.name="EdgeViewState" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/folding/1.1/EdgeViewState"/>
+	<key id="d15" for="port" attr.name="PortLabels" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/PortLabels"/>
+	<key id="d16" for="port" attr.name="PortLocationParameter" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/PortLocationParameter">
+		<default>
+			<x:Static Member="y:FreeNodePortLocationModel.NodeCenterAnchored"/>
+		</default>
+	</key>
+	<key id="d17" for="port" attr.name="PortStyle" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/PortStyle">
+		<default>
+			<x:Static Member="y:VoidPortStyle.Instance"/>
+		</default>
+	</key>
+	<key id="d18" for="port" attr.name="PortViewState" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/folding/1.1/PortViewState"/>
+	<key id="d19" attr.name="SharedData" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/SharedData"/>
+	<data key="d19">
+		<y:SharedData>
+			<yjs:SolidColorFill x:Key="1" color="#FF607D8B"/>
+			<yjs:SolidColorFill x:Key="2" color="#FFA3F1BB"/>
+			<y:InteriorLabelModel x:Key="3"/>
+			<y:CompositeLabelModelParameter x:Key="4">
+				<y:CompositeLabelModelParameter.Parameter>
+					<y:InteriorLabelModelParameter Position="West" Model="{y:GraphMLReference 3}"/>
+				</y:CompositeLabelModelParameter.Parameter>
+				<y:CompositeLabelModelParameter.Model>
+					<y:CompositeLabelModel>
+						<y:CompositeLabelModel.LabelModels>
+							<y:ExteriorLabelModel Insets="5"/>
+							<y:GraphMLReference ResourceKey="3"/>
+							<y:FreeNodeLabelModel/>
+						</y:CompositeLabelModel.LabelModels>
+					</y:CompositeLabelModel>
+				</y:CompositeLabelModelParameter.Model>
+			</y:CompositeLabelModelParameter>
+			<yjs:Font x:Key="5" fontSize="12" fontFamily="'Arial'"/>
+			<yjs:SolidColorFill x:Key="6" color="#FFB0BEC5"/>
+			<yjs:Stroke x:Key="7" fill="#FF336699"/>
+			<yjs:PolylineEdgeStyle x:Key="8" stroke="{y:GraphMLReference 7}">
+				<yjs:PolylineEdgeStyle.targetArrow>
+					<yjs:Arrow type="TRIANGLE" scale="0.75" stroke="{y:GraphMLReference 7}" fill="#FF336699" cropLength="1"/>
+				</yjs:PolylineEdgeStyle.targetArrow>
+			</yjs:PolylineEdgeStyle>
+		</y:SharedData>
+	</data>
+	<graph id="G" edgedefault="directed">
+		<data key="d6">
+			<y:Json>{"version":"2.0.0","theme":{"name":"light","version":"1.0.0"},"layout":"layout-uml","config":{"p_useDrawingAsSketch":false,"p_selectedElementsIncrementally":false,"p_nodeToNodeDistance":44,"p_automaticEdgeGroupingEnabled":false,"p_considerNodeLabels":true,"p_edgeLabeling":0,"p_orientation":3}}</y:Json>
+		</data>
+		<node id="n0">
+			<data key="d0">1</data>
+			<data key="d5">
+				<y:RectD X="-503.00307256038684" Y="49" Width="503.00307256038684" Height="284"/>
+			</data>
+			<data key="d7">
+				<uml:UMLNodeStyle fill="{y:GraphMLReference 1}" highlightFill="{y:GraphMLReference 2}">
+					<uml:UMLNodeStyle.model>
+						<uml:UMLClassModel stereotype="" constraint="" className="open_image()" attributesOpen="true" operationsOpen="true">
+							<uml:UMLClassModel.attributes>
+								<x:Array Type="sys:Object">
+									<sys:String><![CDATA[- No parameters (called for both encoding and decoding processes on button click)]]></sys:String>
+									<sys:String><![CDATA[Get the image from computer]]></sys:String>
+								</x:Array>
+							</uml:UMLClassModel.attributes>
+							<uml:UMLClassModel.operations>
+								<x:Array Type="sys:Object">
+									<sys:String><![CDATA[+ Opens user’s file explorer ]]></sys:String>
+									<sys:String><![CDATA[+ assign the image to image object class variable main_image. ]]></sys:String>
+									<sys:String><![CDATA[+ set a second image object class variable to make copy]]></sys:String>
+									<sys:String>EXCEPTIONS:</sys:String>
+									<sys:String><![CDATA[+ IOError --user selects invalid file type]]></sys:String>
+									<sys:String><![CDATA[-	Dialog pop-up error message shown to user, user returned to main GUI. ]]></sys:String>
+									<sys:String><![CDATA[- User may reattempt choosing image file.]]></sys:String>
+									<sys:String><![CDATA[+ Throws/Catches AttributeError – user exits out of file explorer without choosing a file]]></sys:String>
+									<sys:String><![CDATA[-	User receives no alert; file explorer simply closes, and user is returned to main GUI.]]></sys:String>
+									<sys:String><![CDATA[  User may reattempt choosing image file]]></sys:String>
+								</x:Array>
+							</uml:UMLClassModel.operations>
+						</uml:UMLClassModel>
+					</uml:UMLNodeStyle.model>
+				</uml:UMLNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,1"/>
+				</data>
+			</port>
+			<port name="p1">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0,0.5"/>
+				</data>
+			</port>
+		</node>
+		<node id="n1">
+			<data key="d0">2</data>
+			<data key="d5">
+				<y:RectD X="-1008.7122804434342" Y="111.875" Width="421.10673007606994" Height="158.25"/>
+			</data>
+			<data key="d7">
+				<uml:UMLNodeStyle fill="{y:GraphMLReference 1}" highlightFill="{y:GraphMLReference 2}">
+					<uml:UMLNodeStyle.model>
+						<uml:UMLClassModel stereotype="" constraint="" className="def pixelator (image object):" attributesOpen="true" operationsOpen="true">
+							<uml:UMLClassModel.attributes>
+								<x:Array Type="sys:Object">
+									<sys:String><![CDATA[- Parameters: image object retrieved from open_image_file()]]></sys:String>
+									<sys:String><![CDATA[ Used for both encoding and decoding process ]]></sys:String>
+								</x:Array>
+							</uml:UMLClassModel.attributes>
+							<uml:UMLClassModel.operations>
+								<x:Array Type="sys:Object">
+									<sys:String><![CDATA[+ arrange pixel data into data structure appropriate for encoding/decoding]]></sys:String>
+									<sys:String><![CDATA[- Return: image pixel data list ]]></sys:String>
+								</x:Array>
+							</uml:UMLClassModel.operations>
+						</uml:UMLClassModel>
+					</uml:UMLNodeStyle.model>
+				</uml:UMLNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.9999999999999999,0.5"/>
+				</data>
+			</port>
+			<port name="p1">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.49999999999999994,1"/>
+				</data>
+			</port>
+		</node>
+		<node id="n2">
+			<data key="d0">3</data>
+			<data key="d5">
+				<y:RectD X="-1008.8440648152307" Y="730.125" Width="421.37029881966293" Height="508"/>
+			</data>
+			<data key="d7">
+				<uml:UMLNodeStyle fill="{y:GraphMLReference 1}" highlightFill="{y:GraphMLReference 2}">
+					<uml:UMLNodeStyle.model>
+						<uml:UMLClassModel stereotype="" constraint="" className="def save_image_file (image object):" attributesOpen="true" operationsOpen="true">
+							<uml:UMLClassModel.attributes>
+								<x:Array Type="sys:Object">
+									<sys:String><![CDATA[- Parameters: image object retrieved from GUI]]></sys:String>
+								</x:Array>
+							</uml:UMLClassModel.attributes>
+							<uml:UMLClassModel.operations>
+								<x:Array Type="sys:Object">
+									<sys:String><![CDATA[+ open user’s default native file explorer]]></sys:String>
+									<sys:String><![CDATA[- Within the file explorer, user can rename and 
+]]></sys:String>
+									<sys:String><![CDATA[choose file location where image is to be saved in computer.]]></sys:String>
+									<sys:String><![CDATA[- If attempting to overwrite another file:]]></sys:String>
+									<sys:String><![CDATA[Dialog pop-up warning “Yes/No” message asking if user wants to ]]></sys:String>
+									<sys:String><![CDATA[replace the file chosen with image.]]></sys:String>
+									<sys:String><![CDATA[	If yes: Overwrite and save image to this location.
+]]></sys:String>
+									<sys:String><![CDATA[	If no: Cancel save operation, return to file explorer]]></sys:String>
+									<sys:String>EXCEPTIONS:</sys:String>
+									<sys:String><![CDATA[PermissionError –user tries to save over restricted or]]></sys:String>
+									<sys:String><![CDATA[  unauthorized file (no permission) ]]></sys:String>
+									<sys:String><![CDATA[-	Dialog pop-up error message shown to user, user returned to ]]></sys:String>
+									<sys:String><![CDATA[file explorer to try and save the image file again]]></sys:String>
+									<sys:String></sys:String>
+									<sys:String><![CDATA[IOError- user tries to save in an unauthorized location  ]]></sys:String>
+									<sys:String><![CDATA[(ex. in the C:\\Windows folder where the OS is located)]]></sys:String>
+									<sys:String><![CDATA[-	Dialog pop-up error message shown to user, user returned to]]></sys:String>
+									<sys:String><![CDATA[ file explorer to try and save the image file again in a different location]]></sys:String>
+									<sys:String></sys:String>
+									<sys:String><![CDATA[AttributeError – user exits out of file explorer without saving the file]]></sys:String>
+									<sys:String><![CDATA[-	Dialog pop-up error message shown to user asking user if they are sure 
+]]></sys:String>
+									<sys:String><![CDATA[they want to return to GUI without saving. ]]></sys:String>
+									<sys:String><![CDATA[ If yes, return user to Main GUI with encoded/decoded message ready to ]]></sys:String>
+									<sys:String><![CDATA[save again.]]></sys:String>
+									<sys:String><![CDATA[ If no, stay in file explorer to allow user to reattempt to save file]]></sys:String>
+								</x:Array>
+							</uml:UMLClassModel.operations>
+						</uml:UMLClassModel>
+					</uml:UMLNodeStyle.model>
+				</uml:UMLNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.9999999999999998,0.5"/>
+				</data>
+			</port>
+		</node>
+		<node id="n3">
+			<data key="d0">4</data>
+			<data key="d5">
+				<y:RectD X="-1068.3147582504116" Y="482.125" Width="540.3116856900249" Height="204"/>
+			</data>
+			<data key="d7">
+				<uml:UMLNodeStyle fill="{y:GraphMLReference 1}" highlightFill="{y:GraphMLReference 2}">
+					<uml:UMLNodeStyle.model>
+						<uml:UMLClassModel stereotype="" constraint="" className="reset_image_file ():" attributesOpen="true" operationsOpen="true">
+							<uml:UMLClassModel.attributes>
+								<x:Array Type="sys:Object">
+									<sys:String><![CDATA[No parameters, restores image to its original state]]></sys:String>
+								</x:Array>
+							</uml:UMLClassModel.attributes>
+							<uml:UMLClassModel.operations>
+								<x:Array Type="sys:Object">
+									<sys:String><![CDATA[+ dialog pop-up yes no alert message asking user if user wants to reset the current ]]></sys:String>
+									<sys:String><![CDATA[image to its original form]]></sys:String>
+									<sys:String><![CDATA[- If yes, delete main_image variable and replace it with backup_image. Backup image becomes ]]></sys:String>
+									<sys:String><![CDATA[the main_image (you’re left with two copies of the original unaltered image)
+		Ex.) main_image = backup_image
+]]></sys:String>
+									<sys:String><![CDATA[- If no, do nothing, go back to main GUI]]></sys:String>
+									<sys:String><![CDATA[- If user exits out of dialog without selected yes or no, assume no go back to main GUI]]></sys:String>
+								</x:Array>
+							</uml:UMLClassModel.operations>
+						</uml:UMLClassModel>
+					</uml:UMLNodeStyle.model>
+				</uml:UMLNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="1,0.5"/>
+				</data>
+			</port>
+		</node>
+		<node id="n4">
+			<data key="d0">5</data>
+			<data key="d5">
+				<y:RectD X="-1068.3147582504116" Y="314.125" Width="540.3116856900249" Height="124"/>
+			</data>
+			<data key="d7">
+				<uml:UMLNodeStyle fill="{y:GraphMLReference 1}" highlightFill="{y:GraphMLReference 2}">
+					<uml:UMLNodeStyle.model>
+						<uml:UMLClassModel stereotype="" constraint="" className="max_chars(image object)" attributesOpen="true" operationsOpen="true">
+							<uml:UMLClassModel.attributes>
+								<x:Array Type="sys:Object">
+									<sys:String><![CDATA[- calculate the max number of 8-bit characters that can be safely encoded into the target image]]></sys:String>
+								</x:Array>
+							</uml:UMLClassModel.attributes>
+							<uml:UMLClassModel.operations>
+								<x:Array Type="sys:Object">
+									<sys:String><![CDATA[+ store max number of 8-bit chars that can be encoded in obj field ]]></sys:String>
+								</x:Array>
+							</uml:UMLClassModel.operations>
+						</uml:UMLClassModel>
+					</uml:UMLNodeStyle.model>
+				</uml:UMLNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+		</node>
+		<node id="n5">
+			<data key="d0">6</data>
+			<data key="d4">
+				<x:List>
+					<y:Label LayoutParameter="{y:GraphMLReference 4}">
+						<y:Label.Text><![CDATA["Choose Image" Button]]></y:Label.Text>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle verticalTextAlignment="BOTTOM" horizontalTextAlignment="CENTER" font="{y:GraphMLReference 5}" textFill="BLACK"/>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="-327.2515362801934" Y="377" Width="151.5" Height="62.75"/>
+			</data>
+			<data key="d7">
+				<uml:UMLNoteStyle fill="{y:GraphMLReference 6}" stroke="BLACK"/>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+		</node>
+		<node id="n6">
+			<data key="d0">7</data>
+			<data key="d4">
+				<x:List>
+					<y:Label LayoutParameter="{y:GraphMLReference 4}">
+						<y:Label.Text><![CDATA["Save Image" Button]]></y:Label.Text>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle verticalTextAlignment="BOTTOM" horizontalTextAlignment="CENTER" font="{y:GraphMLReference 5}" textFill="BLACK"/>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="-327.2515362801934" Y="952.75" Width="151.5" Height="62.75"/>
+			</data>
+			<data key="d7">
+				<uml:UMLNoteStyle fill="{y:GraphMLReference 6}" stroke="BLACK"/>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0,0.5"/>
+				</data>
+			</port>
+		</node>
+		<node id="n7">
+			<data key="d0">8</data>
+			<data key="d4">
+				<x:List>
+					<y:Label LayoutParameter="{y:GraphMLReference 4}">
+						<y:Label.Text><![CDATA["Reset Image" Button]]></y:Label.Text>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle verticalTextAlignment="BOTTOM" horizontalTextAlignment="CENTER" font="{y:GraphMLReference 5}" textFill="BLACK"/>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="-327.2515362801934" Y="552.75" Width="151.5" Height="62.75"/>
+			</data>
+			<data key="d7">
+				<uml:UMLNoteStyle fill="{y:GraphMLReference 6}" stroke="BLACK"/>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0,0.5"/>
+				</data>
+			</port>
+		</node>
+		<edge id="e0" source="n5" target="n0" sourceport="p0" targetport="p0">
+			<data key="d13">
+				<y:GraphMLReference ResourceKey="8"/>
+			</data>
+		</edge>
+		<edge id="e1" source="n0" target="n1" sourceport="p1" targetport="p0">
+			<data key="d13">
+				<y:GraphMLReference ResourceKey="8"/>
+			</data>
+		</edge>
+		<edge id="e2" source="n6" target="n2" sourceport="p0" targetport="p0">
+			<data key="d13">
+				<y:GraphMLReference ResourceKey="8"/>
+			</data>
+		</edge>
+		<edge id="e3" source="n1" target="n4" sourceport="p1" targetport="p0">
+			<data key="d13">
+				<y:GraphMLReference ResourceKey="8"/>
+			</data>
+		</edge>
+		<edge id="e4" source="n7" target="n3" sourceport="p0" targetport="p0">
+			<data key="d13">
+				<y:GraphMLReference ResourceKey="8"/>
+			</data>
+		</edge>
+	</graph>
+</graphml>
