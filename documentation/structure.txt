@@ -4,31 +4,35 @@ Steganosaurus/
 |
 |
 |__ assets/
-|   |__ icon.png
+|   |__ stego.png
+|   |__ 0.jpeg
+|   |__ 1.jpeg
 |
-|__ images/
+|__ test_images/
 |   |__ uncoded_image_1.jpeg
 |   |__ uncoded_image_2.jpeg
 |   |__ coded_image_1.jpeg
 |   |__ coded_image_2.jpeg
 |
 |__ steganosaurus/
+|   |__ gui.ky
 |   |__ __main__.py
 |   |__ stego.py
-|   |__ file_utils.py
-|   |__ message_utils.py
+|   |__ utils.py
+|   |__ models.py
 |
 |__ requirements.txt
 
-The assets/ folder will contain icon images and any other graphics used to enhance the look and feel of the application. We may or may not decide to skin the application to make it look nicer than the stock kivy GUI elements.
+The assets/ folder will contain icon images and any other graphics used to enhance the look and feel of the application (for example, default images).
 
-The images/ folder will contain at least two un-encoded test images and two test images which contain a coded message.
+The test_images/ folder will contain at least two un-encoded test images and two test images which contain a coded message for testing. Will be removed from distribution after we get a grade.
 
 The steganosaurus/ folder will contain the main application files.
-- __main__.py is the file which will start the application.
-- stego.py will contain all GUI code.
-- file_utils.py will contain all file read/write functions.
-- message_utils.py will contain all message encoding/decoding functions.
+- gui.ky is the GUI layout for kivy and will contain all style elements of the GUI
+- __main__.py is the file which will start the application. This file shall remain free of any application code.
+- stego.py will contain all GUI handlers and any necessary runtime variables and functions required to launch the application. This is the heart of the application.
+- utils.py will contain all functions that will be required by the application. Examples include the opening and saving files, converting strings, and user alert functions.
+- models.py will contain the ImageObject class declaration. It may be used to expand functionality to handle other file types in the future.
 
 The requirements.txt file will enumerate all required packages needed to run the application.
 
