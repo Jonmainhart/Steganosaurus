@@ -1,3 +1,18 @@
+# utils.py
+"""
+Steganosaurus
+    
+Linden Crandall
+Jonthan Mainhart
+Zhihua Zheng
+
+Final Project for CMSC 495.
+
+April 11, 2022
+
+Utility functions for Steganosaurus. 
+"""
+
 import PIL
 import PySimpleGUI as dialog_pop_up
 from PIL import Image
