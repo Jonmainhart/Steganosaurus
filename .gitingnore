@@ -39,3 +39,9 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Project specific files
+.vscode/settings.json
+Steganosaurus/steganosaurus/__pycache__/__main__.cpython-39.pyc
+Steganosaurus/steganosaurus/__pycache__/models.cpython-39.pyc
+Steganosaurus/steganosaurus/__pycache__/utils.cpython-39.pyc
