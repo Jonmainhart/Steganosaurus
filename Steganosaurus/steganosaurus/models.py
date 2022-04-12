@@ -13,17 +13,22 @@ April 11, 2022
 Object models for Steganosaurus.
 """
 from PIL import Image
-from utils import random_img, convert_message
+from utils import random_img, convert_message, open_image
 
 
 class ImageObject:
-
-    def __init__(self, filename=random_img()): # default constructor selects random image from assets/
+    # def __init__(self, filename=random_img()): # default constructor selects random image from assets/ in utils.py
+    # I don't know how we are going to incorporate both the random_img() selection as well as the filechooser
+    # # here is the constructor signature for getting the image file via filechooser    
+    def __init__(self, filename = open_image()):
         self.filename: str = filename
         self._image = Image.open(self.filename, 'r')
         self.rgb_pixel_data = self._extract_pixel_data()
         self._backup_pixel_data = self.rgb_pixel_data.copy() # copy values instead of reference
         self.max_available_chars: int = self._calculate_max_chars()
+
+   
+
 
     def _extract_pixel_data(self):
         """
@@ -117,3 +122,5 @@ class ImageObject:
         Resets image to original pixel values.
         """
         self.rgb_pixel_data = self._backup_pixel_data.copy()
+
+
