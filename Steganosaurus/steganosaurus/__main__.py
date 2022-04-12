@@ -26,6 +26,7 @@ def main():
     print(f"Image file name: {img}\n")
     print('Image memory location')
     print(img.rgb_pixel_data)
+    print(f'THIS IS THE MAX CHAR >>> {img._calculate_max_chars()}')
     print('Comparing original to backup...')
     print(list(img.rgb_pixel_data) == list(img._backup_pixel_data))
     print('encoding image with "hello" ... ')

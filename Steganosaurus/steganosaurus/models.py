@@ -18,7 +18,7 @@ from utils import random_img, convert_message
 
 class ImageObject:
 
-    def __init__(self, filename=random_img()): # default constructor selects random image from assets/ in utils.py    
+    def __init__(self, filename=random_img()): # default constructor selects random image from assets/    
         self.filename: str = filename
         self._image = Image.open(self.filename, 'r') # private ImageCore Object
         self.rgb_pixel_data = self._extract_pixel_data()
@@ -37,7 +37,15 @@ class ImageObject:
         return data
     
     def _calculate_max_chars(self) -> int: # returns an int to caller
-        pass
+        
+        # counts each pixel - 300 x 300 pic returns 90,000 pix
+        num_of_pixels = len(self.rgb_pixel_data) 
+        
+        # pixels * 3 (red, green, blue) / 9 (8-bit char + 1 control bit)
+        max_chr = int(((num_of_pixels * 3) / 9)) # cast to int - division returns float
+
+        return max_chr
+
 
     def _modify_pixels(self, data: list):
         # TODO - reduce complexity
