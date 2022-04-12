@@ -1,0 +1,75 @@
+# -------------------------------------
+#Steganosaurus
+    
+# Linden Crandall
+# Jonthan Mainhart
+# Zhihua Zheng
+
+# Final Project for CMSC 495.
+
+# April 12, 2022
+
+# MainFrame Template for Steganosaurus.
+# -------------------------------------
+#: import Factory kivy.factory.Factory
+#: import utils kivy.utils
+
+<MainWidget>:
+    BoxLayout
+        orientation: "vertical"
+        Button:
+            id: "temporary_btn_id1"
+            size_hint: None, None
+            size: 300, 200
+            pos_hint: {'x': .5}
+            text: "Warning Dialog"
+            on_release: root.popup_user_notification(self, '') # TODO
+            #on_release: Factory.WarningPopup().open()
+        Button:
+            id: "temporary_btn_id2"
+            size_hint: None, None
+            size: 300, 200
+            pos_hint: {'x': .5}
+            text: "Info/Error Dialog"
+            on_release: root.popup_user_notification(self,'') # TODO
+            #on_release: Factory.InfoAndErrorPopup().open()
+
+<WarningPopup@Popup>:
+    id: warning_dialog
+    auto_dismiss: False
+    title: "contents (%s)"%(app.message_type) # Display Message Type
+    size_hint: .6, .6
+    WarningDialog:
+
+<InfoAndErrorPopup@Popup>:
+    id: info_error_dialog
+    auto_dismiss: False
+    title: "contents (%s)"%(app.message_type) # Display Message Type
+    size_hint: .6, .6
+    InfoAndErrorDialog:
+
+<RoundedCornerButton@Button>:
+    background_color: (0,0,0,0)
+    background_normal: "white"
+    color: 1, 1, 1, 1 # Text color
+    customized_color: (76/255, 175/255, 80/255, 1)
+    bold: True
+    # Change button background color, on press
+    on_press: root.customized_color = utils.get_color_from_hex('#3e8e41')
+    canvas.before:
+        Color:
+            rgba: self.customized_color
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [25]
+
+<MessageLabel@Label>:
+    background_color: (0,0,0,0)
+    background_normal: "white"
+    canvas.before:
+        Color:
+            rgba: self.background_color
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos

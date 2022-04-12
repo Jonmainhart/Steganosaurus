@@ -1,0 +1,66 @@
+# -------------------------------------
+#Steganosaurus
+    
+# Linden Crandall
+# Jonthan Mainhart
+# Zhihua Zheng
+
+# Final Project for CMSC 495.
+
+# April 12, 2022
+
+# PopupDialogWidget Template for Steganosaurus.
+# -------------------------------------
+#: import Factory kivy.factory.Factory
+
+<WarningDialog@BoxLayout>:
+    orientation: "vertical"
+    spacing: 20
+    padding: 30
+    Image:
+        source: "../assets/stego.png" # jpg compress better images, png has transparency
+        size_hint_y: None
+        width: 150
+    MessageLabel:
+        text: "Here we display warning messages. contents: (%s) "%(app.message)
+        size_hint_y: None
+        text_size: self.width, None
+        font_size: 30
+        color: (1,0,0,1)
+    GridLayout:
+        cols: 2
+        padding: 50
+        spacing: 50
+        RoundedCornerButton:
+            text: "Yes"
+            size_hint: None, None
+            size: 200, 90
+            background_down: "black"
+            on_release: root.parent.parent.parent.dismiss()
+        RoundedCornerButton:
+            text: "No"
+            size_hint: None, None
+            size: 200, 90
+            on_release: root.parent.parent.parent.dismiss()
+
+<InfoAndErrorDialog@BoxLayout>:
+    orientation: "vertical"
+    spacing: 50
+    padding: 50
+    Image:
+        source: "../assets/stego.png" # jpg compress better images, png has transparency
+        size_hint_y: None
+        width: 150
+    MessageLabel:
+        text: "Here we display info/error messages. contents: (%s) "%(app.message)
+        size_hint_y: None
+        text_size: self.width, None
+        font_size: 30
+        color: (1,0,0,1)
+    RoundedCornerButton:
+        id: info_error_dialog
+        text: "OK"
+        size_hint: None, None
+        size: 200, 90
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        on_release: root.parent.parent.parent.dismiss()
