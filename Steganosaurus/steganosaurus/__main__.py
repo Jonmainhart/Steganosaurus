@@ -19,9 +19,11 @@ Steganosaurus is an image-based steganography application written in Python.
 import utils
 from models import ImageObject
 
+
+
 def main():
-    img = ImageObject()
-    print(img.filename)
+    img = ImageObject() # get image from assets folder in models.py ImageObject class
+    print(f"Image file name: {img}\n")
     print('Image memory location')
     print(img.rgb_pixel_data)
     print('Comparing original to backup...')
