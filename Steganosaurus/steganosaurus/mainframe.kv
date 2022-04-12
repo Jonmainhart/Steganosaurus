@@ -15,24 +15,75 @@
 #: import utils kivy.utils
 
 <MainWidget>:
-    BoxLayout
-        orientation: "vertical"
-        Button:
-            id: "temporary_btn_id1"
+    rows: 4
+    padding: 50
+    spacing: 20
+    BoxLayout:
+        orientation: "horizontal"
+        pos_hint: {'x': 1}
+        Image:
+            source: "../assets/1.jpeg"
             size_hint: None, None
-            size: 300, 200
-            pos_hint: {'x': .5}
-            text: "Warning Dialog"
-            on_release: root.popup_user_notification(self, '') # TODO
-            #on_release: Factory.WarningPopup().open()
-        Button:
-            id: "temporary_btn_id2"
-            size_hint: None, None
-            size: 300, 200
-            pos_hint: {'x': .5}
-            text: "Info/Error Dialog"
-            on_release: root.popup_user_notification(self,'') # TODO
-            #on_release: Factory.InfoAndErrorPopup().open()
+            size: root.width*0.6, root.height*0.6
+            pos_hint: {'top': 1.15}
+            allow_stretch: True
+        BoxLayout:
+            orientation: "vertical"
+            padding: 50
+            spacing: 30
+            pos_hint: {'top': .9}
+            RoundedCornerButton:
+                id: "temporary_btn_id1"
+                size_hint: None, None
+                size: 230, 90
+                text: "Open Image"
+                on_release: root.on_open_button_click() # TODO
+                #on_release: Factory.WarningPopup().open()
+            RoundedCornerButton:
+                id: "temporary_btn_id2"
+                size_hint: None, None
+                size: 230, 90
+                text: "Warning Dialog"
+                on_release: root.popup_user_notification(self,'') # TODO
+                #on_release: Factory.InfoAndErrorPopup().open()
+            RoundedCornerButton:
+                id: "temporary_btn_id3"
+                size_hint: None, None
+                size: 230, 90
+                text: "Info/Error Dialog"
+                #text: "Save Image"
+                on_release: root.popup_user_notification(self, '') # TODO
+                #on_release: root.on_save_button_click() # TODO
+                #on_release: Factory.WarningPopup().open()
+            RoundedCornerButton:
+                id: "temporary_btn_id4"
+                size_hint: None, None
+                size: 230, 90
+                text: "Reset Image"
+                disabled: root.reset_btn_disabled
+                on_release: root.on_reset_button_click() # TODO
+                #on_release: Factory.InfoAndErrorPopup().open()
+    MessageLabel: #DialogNotificationLabel
+        text: root.user_notification_msg
+        size_hint: 1, .1
+        text_size: self.width, None
+        font_size: 30
+        color: (1,0,0,1)
+    TextInput:
+        id: encode_text_input
+        size_hint: 1, .65
+        text: root.textfield_str
+        hint_text: "Enter scecret message here" # Place holder
+        multiline: False
+        on_text_validate:  root.on_text_validate(self)  # When press enterm
+    AnchorLayout:  
+        anchor_x: 'right'
+        anchor_y: 'center'
+        size_hint: .1, .07
+        Label:
+            text: "(" + str(len(encode_text_input.text)) + "/" + root.maximum_char_count +")"
+            text_size: self.width, None
+            size_hint: None, .1
 
 <WarningPopup@Popup>:
     id: warning_dialog
@@ -49,6 +100,7 @@
     InfoAndErrorDialog:
 
 <RoundedCornerButton@Button>:
+    background_disabled_normal: "black"
     background_color: (0,0,0,0)
     background_normal: "white"
     color: 1, 1, 1, 1 # Text color
