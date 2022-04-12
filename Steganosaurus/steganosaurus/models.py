@@ -63,7 +63,7 @@ class ImageObject:
             pixels = [value for value in image_data.__next__()[:3] + image_data.__next__()[:3] + image_data.__next__()[:3]]
 
             # Pixel value will shift odd for 1 and even for 0
-            for j in range(0, 8):
+            for j in range(0, 8): # upper bound not included
                 if (data[i][j] == '0' and pixels[j]% 2 != 0): # make even
                     pixels[j] -= 1
 
@@ -95,6 +95,8 @@ class ImageObject:
         """
         Encodes a user-generated message in the rgb pixel data of the image object.
 
+        Adapted from https://www.geeksforgeeks.org/image-based-steganography-using-python/
+
         Args:
             user_input (str): User-generated string.
         """
@@ -110,9 +112,33 @@ class ImageObject:
             else:
                 x += 1
         
-    def decode_image(self):
-        # TODO - implement
-        pass
+    def decode_image(self) -> str:
+        """
+        Decodes message hidden in pixel data of an image.
+
+        Adapted from https://www.geeksforgeeks.org/image-based-steganography-using-python/
+
+        Returns:
+            str: hidden message
+        """
+        
+        msg = ''
+        image_data = iter(self.rgb_pixel_data)
+
+        while(True): # TODO - refactor to eliminate while true
+            pixels = [value for value in image_data.__next__()[:3] + image_data.__next__()[:3] + image_data.__next__()[:3]]
+
+            bin_str = ''
+
+            for i in pixels[:8]:
+                if (i % 2 == 0):
+                    bin_str += '0'
+                else:
+                    bin_str += '1'
+            
+            msg += chr(int(bin_str, 2))
+            if (pixels[-1] % 2 != 0):
+                return msg
 
     def reset_image(self):
         """

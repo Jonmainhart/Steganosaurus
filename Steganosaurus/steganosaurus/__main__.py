@@ -32,6 +32,7 @@ def main():
     img.encode_image('hello')
     print('Comparing ,modified value with back up ... ')
     print(list(img.rgb_pixel_data) == list(img._backup_pixel_data))
+    print(f'The hidden message is {img.decode_image()}')
     print('resetting original ... ')
     img.reset_image()
     print('comparing reset value with backup')
