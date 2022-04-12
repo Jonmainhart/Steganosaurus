@@ -16,7 +16,7 @@ Main file for Steganosaurus.
 Steganosaurus is an image-based steganography application written in Python.
 """
 
-import utils
+from utils import open_image
 from models import ImageObject
 
 
@@ -36,6 +36,12 @@ def main():
     img.reset_image()
     print('comparing reset value with backup')
     print(list(img.rgb_pixel_data) == list(img._backup_pixel_data))
+    print('get a new image')
+    img = ImageObject(open_image())
+    print(img.filename)
+    print(type(img))
+    print(type(img.rgb_pixel_data))
+    print(type(img._image))
 
 
 if __name__ == "__main__":
