@@ -25,9 +25,6 @@ class ImageObject:
         self._backup_pixel_data = self.rgb_pixel_data.copy() # private - copy values instead of reference
         self.max_available_chars: int = self._calculate_max_chars()
 
-   
-
-
     def _extract_pixel_data(self):
         """
         Private method to extract the pixel data from the image.
@@ -42,7 +39,6 @@ class ImageObject:
     def _calculate_max_chars(self) -> int: # returns an int to caller
         pass
 
-    
     def _modify_pixels(self, data: list):
         # TODO - reduce complexity
         """
