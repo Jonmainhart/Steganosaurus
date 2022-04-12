@@ -13,18 +13,16 @@ April 11, 2022
 Object models for Steganosaurus.
 """
 from PIL import Image
-from utils import random_img, convert_message, open_image
+from utils import random_img, convert_message
 
 
 class ImageObject:
-    # def __init__(self, filename=random_img()): # default constructor selects random image from assets/ in utils.py
-    # I don't know how we are going to incorporate both the random_img() selection as well as the filechooser
-    # # here is the constructor signature for getting the image file via filechooser    
-    def __init__(self, filename = open_image()):
+
+    def __init__(self, filename=random_img()): # default constructor selects random image from assets/ in utils.py    
         self.filename: str = filename
-        self._image = Image.open(self.filename, 'r')
+        self._image = Image.open(self.filename, 'r') # private ImageCore Object
         self.rgb_pixel_data = self._extract_pixel_data()
-        self._backup_pixel_data = self.rgb_pixel_data.copy() # copy values instead of reference
+        self._backup_pixel_data = self.rgb_pixel_data.copy() # private - copy values instead of reference
         self.max_available_chars: int = self._calculate_max_chars()
 
    
@@ -48,8 +46,11 @@ class ImageObject:
     def _modify_pixels(self, data: list):
         # TODO - reduce complexity
         """
+        Private.
         Modifies the RGB values of the pixels of the ImageCore object by shifting 
         the value of each pixel to be either odd for a binary 1 or even for a binary 0.
+
+        Adapted from https://www.geeksforgeeks.org/image-based-steganography-using-python/
 
         Args:
             data (list): binary encoded characters
