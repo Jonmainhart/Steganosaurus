@@ -20,11 +20,10 @@ from kivy.factory import Factory
 from kivy.properties import StringProperty, BooleanProperty
 
 from utils import open_image
-
 # Set window size.
 Config.set('graphics', 'width', '550')
 Config.set('graphics', 'height', '500')
-Config.set('graphics', 'resizable', False)
+Config.set('graphics', 'resizable', True)
 # Import external kv file.
 Builder.load_file('dialog.kv')
 
