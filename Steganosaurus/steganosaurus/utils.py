@@ -1,7 +1,7 @@
 # utils.py
 """
 Steganosaurus
-    
+	
 Linden Crandall
 Jonthan Mainhart
 Zhihua Zheng
@@ -19,20 +19,20 @@ from tkinter.filedialog import askopenfilename
 
 
 def open_image() -> str:
-    """
-    Open file explorer to get image. 
-    Restricted to Image Files.
+	"""
+	Open file explorer to get image. 
+	Restricted to Image Files.
 
-    Returns:
-        str: file path
-    """
+	Returns:
+		str: file path
+	"""
 
-    # open file explorer to get image
-    # return file path string
-    # Image Files Only - currently limited to JPG, JPEG files.
-    image_path = askopenfilename(filetypes=("Image Files", (".jpeg", ".jpg")))
+	# open file explorer to get image
+	# return file path string
+	# Image Files Only - currently limited to JPG, JPEG files.
+	image_path = askopenfilename(filetypes=[("Image File", (".jpeg", ".jpg"))])
 
-    return image_path
+	return image_path
 
 # choosing random image either 0.jpg or 1.jpg
 def random_img() -> str:
@@ -43,10 +43,10 @@ def random_img() -> str:
 		int: References image in assets folder.
 	"""
 	# returns the absolute path of the __file__ object
-    # should work across all file systems
+	# should work across all file systems
 	assets_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../assets/'))
 	
-    # path to load random image
+	# path to load random image
 	img: str = f'{assets_path}/{random.randint(0, 1)}.jpeg' # change upper bound to match files in assets folder
 	
 	print("Image:" + img)
