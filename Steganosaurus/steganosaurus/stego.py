@@ -11,6 +11,7 @@ April 12, 2022
 
 MainFrame classes for Steganosaurus.
 """
+import os
 from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.uix.gridlayout  import GridLayout
@@ -18,6 +19,7 @@ from kivy.lang import Builder
 from kivy.config import Config
 from kivy.factory import Factory
 from kivy.properties import StringProperty, BooleanProperty
+from models import ImageObject
 
 from utils import open_image
 # Set window size.
@@ -25,7 +27,7 @@ Config.set('graphics', 'width', '550')
 Config.set('graphics', 'height', '500')
 Config.set('graphics', 'resizable', True)
 # Import external kv file.
-Builder.load_file('dialog.kv')
+Builder.load_file(os.path.abspath(os.path.join(os.path.dirname(__file__), 'dialog.kv')))
 
 class MainWidget(GridLayout):
 
@@ -33,6 +35,8 @@ class MainWidget(GridLayout):
     user_notification_msg = StringProperty('Display Text Field Related Warning Message')
     textfield_str = StringProperty('')
     maximum_char_count = StringProperty('100')
+
+    display_image = ImageObject()
 
     def popup_user_notification(self, message, message_type):
 
@@ -49,7 +53,7 @@ class MainWidget(GridLayout):
 
     def on_open_button_click(self):
         # pass
-        open_image()
+        self.display_image = ImageObject(open_image())
 
     def on_encode_button_click(self):
         # TODO: If encode button is clicked/done
