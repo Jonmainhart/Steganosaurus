@@ -1,4 +1,3 @@
-#:kivy 2.1.0
 # -------------------------------------
 #Steganosaurus
     
@@ -16,6 +15,7 @@
 #: import utils kivy.utils
 
 <MainWidget>:
+    id: main_widget
     rows: 4
     padding: 50
     spacing: 20
@@ -23,7 +23,7 @@
         orientation: "horizontal"
         pos_hint: {'x': 1}
         Image:
-            source: root.display_image.filename
+            source: "../assets/1.jpeg"
             size_hint: None, None
             size: root.width*0.6, root.height*0.6
             pos_hint: {'top': 1.15}
@@ -39,7 +39,7 @@
                 size: 230, 90
                 text: "Open Image"
                 on_release: root.on_open_button_click() # TODO
-                #on_release: Factory.WarningPopup().open()
+                #on_release: Factory.FileChooserPopup()
             RoundedCornerButton:
                 id: "temporary_btn_id2"
                 size_hint: None, None
@@ -126,3 +126,27 @@
         RoundedRectangle:
             size: self.size
             pos: self.pos
+
+<FileChooserPopup>:
+    title: "File Chooser"
+    BoxLayout:
+        id: file_chooser_popup
+        size: root.size
+        orientation: "vertical"
+        Image:
+            id: file_image
+            source: ""
+        FileChooserIconView:
+            id: file_chooser
+            #path: './' # TODO: Set a default open up root path.
+            on_selection: root.selected(file_chooser.selection)
+        BoxLayout:
+            size_hint_y: None
+            height: 50
+            Button: 
+                text: "Cancel"
+                on_release: root.dismiss()
+            Button:
+                text: "Load"
+                # TODO: Need to add load file code.
+                on_release: root.dismiss()

@@ -11,23 +11,46 @@ April 12, 2022
 
 MainFrame classes for Steganosaurus.
 """
-import os
 from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.uix.gridlayout  import GridLayout
+from kivy.uix.floatlayout  import FloatLayout
 from kivy.lang import Builder
 from kivy.config import Config
 from kivy.factory import Factory
 from kivy.properties import StringProperty, BooleanProperty
+from kivy.uix.popup import Popup
 from models import ImageObject
 
-from utils import open_image
 # Set window size.
 Config.set('graphics', 'width', '550')
 Config.set('graphics', 'height', '500')
-Config.set('graphics', 'resizable', True)
+Config.set('graphics', 'resizable', False)
 # Import external kv file.
-Builder.load_file(os.path.abspath(os.path.join(os.path.dirname(__file__), 'dialog.kv')))
+Builder.load_file('dialog.kv')
+
+class FileChooserPopup(Popup):
+
+    display_image = ImageObject()
+
+    def show_load_list(self):
+        Factory.FileChooserPopup().open()
+
+    def selected(self,filename):
+        try:
+            # Assign selected file path to image source.
+            self.ids.file_image.source = filename[0] 
+            # Pass selected file path to the ImageObject.
+            self.display_image = ImageObject(filename[0])
+            print(self.display_image) # TODO: Just to check the output. Delete later.
+        except:
+            pass # TODO: Specify Exceptions
+
+    def load_list(self):
+        pass
+
+    def dismiss_popup(self):
+        pass
 
 class MainWidget(GridLayout):
 
@@ -35,8 +58,6 @@ class MainWidget(GridLayout):
     user_notification_msg = StringProperty('Display Text Field Related Warning Message')
     textfield_str = StringProperty('')
     maximum_char_count = StringProperty('100')
-
-    display_image = ImageObject()
 
     def popup_user_notification(self, message, message_type):
 
@@ -52,8 +73,7 @@ class MainWidget(GridLayout):
         #print(str(MainFrame().message))
 
     def on_open_button_click(self):
-        # pass
-        self.display_image = ImageObject(open_image())
+        FileChooserPopup().show_load_list()
 
     def on_encode_button_click(self):
         # TODO: If encode button is clicked/done
@@ -80,4 +100,5 @@ class MainFrame(App):
     def build(self):
         self.title = 'Steganosaurus' # GUI title.
         return MainWidget()
+
 MainFrame().run()
