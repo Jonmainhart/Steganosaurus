@@ -21,36 +21,12 @@ from kivy.factory import Factory
 from kivy.properties import StringProperty, BooleanProperty
 from kivy.uix.popup import Popup
 from models import ImageObject
+from kivy.core.window import Window
 
 # Set window size.
-Config.set('graphics', 'width', '550')
-Config.set('graphics', 'height', '500')
-Config.set('graphics', 'resizable', False)
+Window.size = (500, 500)
 # Import external kv file.
 Builder.load_file('dialog.kv')
-
-class FileChooserPopup(Popup):
-
-    display_image = ImageObject()
-
-    def show_load_list(self):
-        Factory.FileChooserPopup().open()
-
-    def selected(self,filename):
-        try:
-            # Assign selected file path to image source.
-            self.ids.file_image.source = filename[0] 
-            # Pass selected file path to the ImageObject.
-            self.display_image = ImageObject(filename[0])
-            print(self.display_image) # TODO: Just to check the output. Delete later.
-        except:
-            pass # TODO: Specify Exceptions
-
-    def load_list(self):
-        pass
-
-    def dismiss_popup(self):
-        pass
 
 class MainWidget(GridLayout):
 
@@ -93,6 +69,28 @@ class MainWidget(GridLayout):
         for id, widget in self.ids.items():
             if widget.__self__ == obj:
                 return id
+
+class FileChooserPopup(Popup):
+
+    file_path = ''
+    display_image = ImageObject()
+
+    def show_load_list(self):
+        Factory.FileChooserPopup().open()
+
+    def selected(self,filename):
+        try:
+            self.ids.file_image.source = filename[0]
+            self.display_image = ImageObject(filename[0])
+            print(self.display_image)
+        except:
+            pass # TODO: Specify Exceptions
+
+    def load_list(self):
+        pass
+
+    def dismiss_popup(self):
+        pass
 
 class MainFrame(App):
     message = 'message'

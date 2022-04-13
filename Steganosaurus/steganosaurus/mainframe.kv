@@ -19,38 +19,45 @@
     rows: 4
     padding: 50
     spacing: 20
-    BoxLayout:
-        orientation: "horizontal"
+    GridLayout:
+        cols:2
+        size_hint: 1, 1
         pos_hint: {'x': 1}
         Image:
             source: "../assets/1.jpeg"
-            size_hint: None, None
-            size: root.width*0.6, root.height*0.6
-            pos_hint: {'top': 1.15}
+            size_hint: None, 1
+            size_hint_x: 1.5
+            pos_hint: {'top': 1}
             allow_stretch: True
         BoxLayout:
             orientation: "vertical"
             padding: 50
             spacing: 30
-            pos_hint: {'top': .9}
+            pos_hint: {'x': .3, 'top': 1}
             RoundedCornerButton:
                 id: "temporary_btn_id1"
-                size_hint: None, None
-                size: 230, 90
+                text_size: self.width, None
+                font_size: self.width/8
+                halign: 'center'
+                size_hint: .8, .2
                 text: "Open Image"
                 on_release: root.on_open_button_click() # TODO
                 #on_release: Factory.FileChooserPopup()
             RoundedCornerButton:
                 id: "temporary_btn_id2"
-                size_hint: None, None
-                size: 230, 90
+                text_size: self.width, None
+                font_size: self.width/8
+                halign: 'center'
+                size_hint: .8, .2
                 text: "Warning Dialog"
                 on_release: root.popup_user_notification(self,'') # TODO
                 #on_release: Factory.InfoAndErrorPopup().open()
             RoundedCornerButton:
                 id: "temporary_btn_id3"
-                size_hint: None, None
-                size: 230, 90
+                text_size: self.width, None
+                font_size: self.width/8
+                halign: 'center'
+                size_hint: .8, .2
                 text: "Info/Error Dialog"
                 #text: "Save Image"
                 on_release: root.popup_user_notification(self, '') # TODO
@@ -58,18 +65,23 @@
                 #on_release: Factory.WarningPopup().open()
             RoundedCornerButton:
                 id: "temporary_btn_id4"
-                size_hint: None, None
-                size: 230, 90
+                text_size: self.width, None
+                font_size: self.width/8
+                halign: 'center'
+                size_hint: .8, .2
                 text: "Reset Image"
                 disabled: root.reset_btn_disabled
                 on_release: root.on_reset_button_click() # TODO
                 #on_release: Factory.InfoAndErrorPopup().open()
     MessageLabel: #DialogNotificationLabel
         text: root.user_notification_msg
-        size_hint: 1, .1
-        text_size: self.width, None
-        font_size: 30
+        font_size: self.width/30
         color: (1,0,0,1)
+        text_size: self.width, None
+        size_hint_y: None
+        height: self.texture_size[1]
+        size_hint: 1, .1
+        pos_hint: {'top': .9}
     TextInput:
         id: encode_text_input
         size_hint: 1, .65
@@ -84,13 +96,17 @@
         Label:
             text: "(" + str(len(encode_text_input.text)) + "/" + root.maximum_char_count +")"
             text_size: self.width, None
+            size_hint_y: None
+            font_size: root.width/40
             size_hint: None, .1
+
 
 <WarningPopup@Popup>:
     id: warning_dialog
     auto_dismiss: False
     title: "contents (%s)"%(app.message_type) # Display Message Type
     size_hint: .6, .6
+    pos_hint: {'center_x': .5,'center_y': .5}
     WarningDialog:
 
 <InfoAndErrorPopup@Popup>:
@@ -98,6 +114,7 @@
     auto_dismiss: False
     title: "contents (%s)"%(app.message_type) # Display Message Type
     size_hint: .6, .6
+    pos_hint: {'center_x': .5,'center_y': .5}
     InfoAndErrorDialog:
 
 <RoundedCornerButton@Button>:
@@ -138,7 +155,7 @@
             source: ""
         FileChooserIconView:
             id: file_chooser
-            #path: './' # TODO: Set a default open up root path.
+            path: './'
             on_selection: root.selected(file_chooser.selection)
         BoxLayout:
             size_hint_y: None
