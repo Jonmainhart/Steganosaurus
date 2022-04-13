@@ -11,6 +11,7 @@ April 12, 2022
 
 MainFrame classes for Steganosaurus.
 """
+import os
 from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.uix.gridlayout  import GridLayout
@@ -26,7 +27,7 @@ from kivy.core.window import Window
 # Set window size.
 Window.size = (500, 500)
 # Import external kv file.
-Builder.load_file('dialog.kv')
+Builder.load_file(os.path.abspath(os.path.join(os.path.dirname(__file__), 'dialog.kv')))
 
 class MainWidget(GridLayout):
 
@@ -34,6 +35,10 @@ class MainWidget(GridLayout):
     user_notification_msg = StringProperty('Display Text Field Related Warning Message')
     textfield_str = StringProperty('')
     maximum_char_count = StringProperty('100')
+
+    # this is the object to be referenced by all other functions
+    # initialize with the default constructor
+    display_image = ImageObject()
 
     def popup_user_notification(self, message, message_type):
 
@@ -49,7 +54,7 @@ class MainWidget(GridLayout):
         #print(str(MainFrame().message))
 
     def on_open_button_click(self):
-        FileChooserPopup().show_load_list()
+        self.display_image = FileChooserPopup().show_load_list()
 
     def on_encode_button_click(self):
         # TODO: If encode button is clicked/done
@@ -72,8 +77,7 @@ class MainWidget(GridLayout):
 
 class FileChooserPopup(Popup):
 
-    file_path = ''
-    display_image = ImageObject()
+    file_path: str = ''
 
     def show_load_list(self):
         Factory.FileChooserPopup().open()
@@ -81,8 +85,12 @@ class FileChooserPopup(Popup):
     def selected(self,filename):
         try:
             self.ids.file_image.source = filename[0]
-            self.display_image = ImageObject(filename[0])
-            print(self.display_image)
+            
+            self.file_path += os.path.abspath(filename[0])
+            # file_path needs to be sent back to the main window
+            # and that string used to re-declare the display_image
+            # variable.
+
         except:
             pass # TODO: Specify Exceptions
 
@@ -95,6 +103,7 @@ class FileChooserPopup(Popup):
 class MainFrame(App):
     message = 'message'
     message_type = 'message_type'
+
     def build(self):
         self.title = 'Steganosaurus' # GUI title.
         return MainWidget()
