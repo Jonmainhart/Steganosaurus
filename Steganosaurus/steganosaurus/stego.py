@@ -22,6 +22,7 @@ from kivy.factory import Factory
 from kivy.properties import StringProperty, BooleanProperty
 from kivy.uix.popup import Popup
 from models import ImageObject
+from kivy.clock import Clock
 from kivy.core.window import Window
 
 # Set window size.
@@ -30,6 +31,10 @@ Window.size = (500, 500)
 Builder.load_file(os.path.abspath(os.path.join(os.path.dirname(__file__), 'dialog.kv')))
 
 class MainWidget(GridLayout):
+    def __init__(self, **kwargs):  #kivy constructor takes 2 arguments.
+        super().__init__(**kwargs)
+        Clock.schedule_interval(self.update_image, .1) # Schedule the function call.
+
     # use this path to load logo images
     LOGO_PATH = os.path.abspath('assets/stego.png')
     
@@ -54,7 +59,6 @@ class MainWidget(GridLayout):
             App.get_running_app().message = 'Info/Error Message'
             App.get_running_app().message_type = 'Info/Error'
             Factory.InfoAndErrorPopup().open()
-        #print(str(MainFrame().message))
 
     def on_open_button_click(self):
         self.display_image = FileChooserPopup().show_load_list()
@@ -70,6 +74,10 @@ class MainWidget(GridLayout):
 
     def on_reset_button_click(self):
         print("Reset Image button is clicked")
+
+    def update_image(self, *args):
+        # Update the image source.
+        self.ids.main_image.source = MainWidget.display_image.filename
 
     # Temporary function to get widget id from mainframe.
     # To display different popup windows.
@@ -89,6 +97,7 @@ class FileChooserPopup(Popup):
         try:
             self.ids.file_image.source = filename[0]
             # assign to local
+            # TODO: After clicking on multiple images then click load button NotADirectoryError occurs.
             self.file_path += os.path.abspath(filename[0])
 
         except:
