@@ -47,7 +47,7 @@ def random_img() -> str:
 	assets_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../assets/'))
 	
 	# path to load random image
-	img: str = f'{assets_path}/{random.randint(0, 1)}.jpeg' # change upper bound to match files in assets folder
+	img: str = f'{assets_path}/{random.randint(0, 3)}.jpeg' # change upper bound to match files in assets folder
 	
 	print("Image:" + img)
 	return img

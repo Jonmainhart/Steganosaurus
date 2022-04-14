@@ -11,6 +11,11 @@ April 12, 2022
 
 MainFrame classes for Steganosaurus.
 """
+from kivy.config import Config
+# Set window non-resizable, before creating the window.
+# Don't change the position of this code.
+Config.set('graphics', 'resizable', False)
+
 import os
 from kivy.app import App
 from kivy.uix.widget import Widget
@@ -26,7 +31,7 @@ from kivy.clock import Clock
 from kivy.core.window import Window
 
 # Set window size.
-Window.size = (500, 500)
+Window.size = (550, 500)
 # Import external kv file.
 Builder.load_file(os.path.abspath(os.path.join(os.path.dirname(__file__), 'dialog.kv')))
 
@@ -34,9 +39,6 @@ class MainWidget(GridLayout):
     def __init__(self, **kwargs):  #kivy constructor takes 2 arguments.
         super().__init__(**kwargs)
         Clock.schedule_interval(self.update_image, .1) # Schedule the function call.
-
-    # use this path to load logo images
-    LOGO_PATH = os.path.abspath('assets/stego.png')
     
     reset_btn_disabled = BooleanProperty(True)
     user_notification_msg = StringProperty('Display Text Field Related Warning Message')
@@ -97,7 +99,6 @@ class FileChooserPopup(Popup):
         try:
             self.ids.file_image.source = filename[0]
             # assign to local
-            # TODO: After clicking on multiple images then click load button NotADirectoryError occurs.
             self.file_path = os.path.abspath(filename[0])
 
         except:
@@ -116,8 +117,12 @@ class FileChooserPopup(Popup):
         pass
 
 class MainFrame(App):
+
     message = 'message'
     message_type = 'message_type'
+
+    # use this path to load logo images
+    LOGO_PATH = os.path.abspath('../assets/stego.png')
 
     def build(self):
         self.title = 'Steganosaurus' # GUI title.

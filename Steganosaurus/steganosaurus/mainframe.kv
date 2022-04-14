@@ -17,30 +17,32 @@
 <MainWidget>:
     id: main_widget
     rows: 4
-    padding: 50
-    spacing: 20
+    padding: "20dp"
+    spacing: "5dp"
+    #pos_hint: {"top": 1}
     GridLayout:
         cols:2
-        size_hint: 1, 1
-        pos_hint: {'x': 1}
+        size_hint: None, None
+        size: "350dp", "250dp"
         Image:
             id: main_image
             source: root.display_image.filename
-            size_hint: None, 1
-            size_hint_x: 1.5
-            pos_hint: {'top': 1}
+            size_hint: None, None
+            width: "330dp"
+            height: "250dp"
             allow_stretch: True
         BoxLayout:
             orientation: "vertical"
-            padding: 50
-            spacing: 30
-            pos_hint: {'x': .3, 'top': 1}
+            padding: "20dp"
+            spacing: "15dp"
             RoundedCornerButton:
                 id: "temporary_btn_id1"
                 text_size: self.width, None
                 font_size: self.width/8
                 halign: 'center'
-                size_hint: .8, .2
+                size_hint: None, None
+                width: "110dp"
+                height: "40dp"
                 text: "Open Image"
                 on_release: root.on_open_button_click() # TODO
                 #on_release: Factory.FileChooserPopup()
@@ -49,7 +51,9 @@
                 text_size: self.width, None
                 font_size: self.width/8
                 halign: 'center'
-                size_hint: .8, .2
+                size_hint: None, None
+                width: "110dp"
+                height: "40dp"
                 text: "Warning Dialog"
                 on_release: root.popup_user_notification(self,'') # TODO
                 #on_release: Factory.InfoAndErrorPopup().open()
@@ -58,7 +62,9 @@
                 text_size: self.width, None
                 font_size: self.width/8
                 halign: 'center'
-                size_hint: .8, .2
+                size_hint: None, None
+                width: "110dp"
+                height: "40dp"
                 text: "Info/Error Dialog"
                 #text: "Save Image"
                 on_release: root.popup_user_notification(self, '') # TODO
@@ -69,23 +75,27 @@
                 text_size: self.width, None
                 font_size: self.width/8
                 halign: 'center'
-                size_hint: .8, .2
+                size_hint: None, None
+                width: "110dp"
+                height: "40dp"
                 text: "Reset Image"
                 disabled: root.reset_btn_disabled
                 on_release: root.on_reset_button_click() # TODO
                 #on_release: Factory.InfoAndErrorPopup().open()
     MessageLabel: #DialogNotificationLabel
+        size_hint: None, None
+        size: "280dp", "20dp"
         text: root.user_notification_msg
-        font_size: self.width/30
+        font_size: self.width/20
         color: (1,0,0,1)
         text_size: self.width, None
         size_hint_y: None
         height: self.texture_size[1]
-        size_hint: 1, .1
-        pos_hint: {'top': .9}
+
     TextInput:
         id: encode_text_input
-        size_hint: 1, .65
+        size_hint: None, None
+        size: "500dp", "150dp"
         text: root.textfield_str
         hint_text: "Enter scecret message here" # Place holder
         multiline: False
@@ -93,21 +103,22 @@
     AnchorLayout:  
         anchor_x: 'right'
         anchor_y: 'center'
-        size_hint: 1, .07
+        size_hint: None, None
+        size: "500dp", "30dp"
         Label:
             text: "(" + str(len(encode_text_input.text)) + "/" + root.maximum_char_count +")"
             text_size: self.width, None
             size_hint_y: None
             halign: 'right'
-            font_size: root.width/40
-            size_hint: 1, .1
-
+            font_size: 30
+            size_hint: 1, 1
 
 <WarningPopup@Popup>:
     id: warning_dialog
     auto_dismiss: False
     title: "contents (%s)"%(app.message_type) # Display Message Type
-    size_hint: .6, .6
+    size_hint: None, None
+    size: "300dp", "300dp"
     pos_hint: {'center_x': .5,'center_y': .5}
     WarningDialog:
 
@@ -115,7 +126,8 @@
     id: info_error_dialog
     auto_dismiss: False
     title: "contents (%s)"%(app.message_type) # Display Message Type
-    size_hint: .6, .6
+    size_hint: None, None
+    size: "300dp", "300dp"
     pos_hint: {'center_x': .5,'center_y': .5}
     InfoAndErrorDialog:
 

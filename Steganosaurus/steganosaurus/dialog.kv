@@ -16,32 +16,37 @@
 
 <WarningDialog@BoxLayout>:
     orientation: "vertical"
-    spacing: 20
-    padding: 30
-    #pos_hint: {'x': 1}
+    padding: "20dp"
+    spacing: "5dp"
     Image:
-        source: "../assets/stego.png" # jpg compress better images, png has transparency
-        size_hint: 1, 1
-        pos_hint: {'top': 1}
-        allow_stretch: True
+        source: app.LOGO_PATH
+        size_hint: None, None
+        width: "220dp"
+        height: "50dp"
+        allow_stretch: False
     MessageLabel:
         text: "Here we display warning messages. contents: (%s) "%(app.message)
-        size_hint_y: None
+        size_hint: None, None
+        width: "220dp"
+        height: "60dp"
         text_size: self.width, None
         font_size: self.width/17
-        pos_hint: {'top': 1, 'center_x': .5, 'center_y': .5}
+        pos_hint: {'center_x': .5, 'center_y': .5}
         color: (1,0,0,1)
     BoxLayout:
         orientation: "horizontal"
-        padding: 50
-        spacing: 20
+        spacing: "20dp"
+        size_hint: None, None
+        width: "240dp"
+        height: "40dp"
         pos_hint: {'top': 1, 'center_x': .5, 'center_y': .5}
         RoundedCornerButton:
             text_size: self.width, None
             font_size: self.width/5
             halign: 'center'
-            size_hint: 0.8, None
-            size_hint_y: 1.5
+            size_hint: None, None
+            width: "110dp"
+            height: "40dp"
             text: "Yes"
             on_release: root.parent.parent.parent.dismiss()
         RoundedCornerButton:
@@ -49,24 +54,27 @@
             text_size: self.width, None
             font_size: self.width/5
             halign: 'center'
-            size_hint: 0.8, None
-            size_hint_y: 1.5
+            size_hint: None, None
+            width: "110dp"
+            height: "40dp"
             on_release: root.parent.parent.parent.dismiss()
 
 <InfoAndErrorDialog@BoxLayout>:
     orientation: "vertical"
-    spacing: 50
-    padding: 50
+    padding: "20dp"
+    spacing: "5dp"
     Image:
-        source: "../assets/stego.png" # jpg compress better images, png has transparency
-        size_hint: 1, 1
-        pos_hint: {'top': 1}
+        source: app.LOGO_PATH
+        size_hint: None, None
+        width: "220dp"
+        height: "50dp"
         allow_stretch: True
     MessageLabel:
         text: "Here we display info/error messages. contents: (%s) "%(app.message)
-        size_hint_y: None
+        size_hint: None, None
+        width: "220dp"
+        height: "60dp"
         text_size: self.width, None
-        pos_hint: {'top': 1}
         font_size: self.width/17
         color: (1,0,0,1)
     RoundedCornerButton:
@@ -75,8 +83,8 @@
         text_size: self.width, None
         halign: 'center'
         font_size: self.width/5
-        pos_hint: {'top': 1}
-        size_hint: None, 1
-        size_hint_x: .4
+        size_hint: None, None
+        width: "110dp"
+        height: "40dp"
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         on_release: root.parent.parent.parent.dismiss()
