@@ -30,7 +30,9 @@ Window.size = (500, 500)
 Builder.load_file(os.path.abspath(os.path.join(os.path.dirname(__file__), 'dialog.kv')))
 
 class MainWidget(GridLayout):
-
+    # use this path to load logo images
+    LOGO_PATH = os.path.abspath('assets/stego.png')
+    
     reset_btn_disabled = BooleanProperty(True)
     user_notification_msg = StringProperty('Display Text Field Related Warning Message')
     textfield_str = StringProperty('')
@@ -97,7 +99,7 @@ class FileChooserPopup(Popup):
         MainWidget.display_image = ImageObject(filename=self.file_path)
         # refresh window
         print(MainWidget.display_image.filename)
-        
+
         # dismiss popup
         self.dismiss()
 
