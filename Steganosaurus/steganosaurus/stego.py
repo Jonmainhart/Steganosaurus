@@ -34,11 +34,12 @@ class MainWidget(GridLayout):
     reset_btn_disabled = BooleanProperty(True)
     user_notification_msg = StringProperty('Display Text Field Related Warning Message')
     textfield_str = StringProperty('')
-    maximum_char_count = StringProperty('100')
+    maximum_char_count = StringProperty('0')
 
     # this is the object to be referenced by all other functions
     # initialize with the default constructor
     display_image = ImageObject()
+    maximum_char_count = str(display_image.max_available_chars)
 
     def popup_user_notification(self, message, message_type):
 
@@ -85,17 +86,20 @@ class FileChooserPopup(Popup):
     def selected(self,filename):
         try:
             self.ids.file_image.source = filename[0]
-            
+            # assign to local
             self.file_path += os.path.abspath(filename[0])
-            # file_path needs to be sent back to the main window
-            # and that string used to re-declare the display_image
-            # variable.
 
         except:
             pass # TODO: Specify Exceptions
 
     def load_list(self):
-        pass
+        # assign to display_image in main window
+        MainWidget.display_image = ImageObject(filename=self.file_path)
+        # refresh window
+        print(MainWidget.display_image.filename)
+        
+        # dismiss popup
+        self.dismiss()
 
     def dismiss_popup(self):
         pass
