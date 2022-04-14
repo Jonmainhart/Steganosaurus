@@ -73,7 +73,7 @@ class MainWidget(GridLayout):
         # print("Save Image button is clicked")
 
     def on_reset_button_click(self):
-        print("Reset Image button is clicked")
+        MainWidget.display_image.reset_image()
 
     def update_image(self, *args):
         # Update the image source.
