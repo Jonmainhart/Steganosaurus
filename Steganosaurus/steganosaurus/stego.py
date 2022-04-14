@@ -46,7 +46,7 @@ class MainWidget(GridLayout):
     # this is the object to be referenced by all other functions
     # initialize with the default constructor
     display_image = ImageObject()
-    maximum_char_count = str(display_image.max_available_chars)
+    maximum_char_count = StringProperty(str(display_image.max_available_chars))
 
     def popup_user_notification(self, message, message_type):
 
@@ -98,7 +98,7 @@ class FileChooserPopup(Popup):
             self.ids.file_image.source = filename[0]
             # assign to local
             # TODO: After clicking on multiple images then click load button NotADirectoryError occurs.
-            self.file_path += os.path.abspath(filename[0])
+            self.file_path = os.path.abspath(filename[0])
 
         except:
             pass # TODO: Specify Exceptions
