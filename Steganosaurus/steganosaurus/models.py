@@ -24,6 +24,7 @@ class ImageObject:
         self.rgb_pixel_data = self._extract_pixel_data()
         self._backup_pixel_data = self.rgb_pixel_data.copy() # private - copy values instead of reference
         self.max_available_chars: int = self._calculate_max_chars()
+        self.decoded_message: str = self.decode_image()
 
     def _extract_pixel_data(self):
         """
