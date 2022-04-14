@@ -93,13 +93,14 @@
     AnchorLayout:  
         anchor_x: 'right'
         anchor_y: 'center'
-        size_hint: .1, .07
+        size_hint: 1, .07
         Label:
             text: "(" + str(len(encode_text_input.text)) + "/" + root.maximum_char_count +")"
             text_size: self.width, None
             size_hint_y: None
+            halign: 'right'
             font_size: root.width/40
-            size_hint: None, .1
+            size_hint: 1, .1
 
 
 <WarningPopup@Popup>:
