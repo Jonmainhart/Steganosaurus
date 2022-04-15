@@ -122,7 +122,7 @@ class MainFrame(App):
     message_type = 'message_type'
 
     # use this path to load logo images
-    LOGO_PATH = os.path.abspath('assets/stego.png')
+    LOGO_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '../assets/stego.png'))
 
     def build(self):
         self.title = 'Steganosaurus' # GUI title.
