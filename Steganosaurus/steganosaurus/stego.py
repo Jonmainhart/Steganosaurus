@@ -54,6 +54,7 @@ class MainWidget(GridLayout):
 
     def popup_user_notification(self, message, message_type):
 
+        
         # TODO: Replace with validating message_type
         if self.get_id(message) == '"temporary_btn_id2"':
             App.get_running_app().message = 'Warning Message!'
@@ -129,9 +130,11 @@ class FileChooserPopup(Popup):
 
             # dismiss popup
             self.dismiss()
-        # throw a "not an image" popup
+        # throw a "not an image" popup, using pass for now until Zhihua completes method
         except Exception:
-            pass  
+            pass
+            # MainWidget.popup_user_notification(self,"Invalid file, please choose a valid image" +
+            # " file ending with .jpg,.jpeg, or .png", "ERROR") 
        
 
     def dismiss_popup(self):
