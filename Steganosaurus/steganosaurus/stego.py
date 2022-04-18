@@ -47,7 +47,9 @@ class MainWidget(GridLayout):
     
     # Use enum to define different message types.
     MESSAGE_TYPE = Enum('MESSAGE_TYPE', 'INFO ERROR WARNING')
+    WARNING_TYPE = Enum('WARNING_TYPE', 'SAVE RESET')
     user_notification_msg = StringProperty('Display Text Field Related Warning Message')
+    warning_type = ''
 
     # this is the object to be referenced by all other functions
     # initialize with the default constructor
@@ -87,29 +89,48 @@ class MainWidget(GridLayout):
         
     def on_save_button_click(self):
         """Call the method save_image() and disable the reset button."""
+        # Set reset button warning popup values.
+        self.warning_type = self.WARNING_TYPE.SAVE
+        self.popup_user_notification( \
+            'Are you sure you want to overwrite the image?', self.MESSAGE_TYPE.WARNING)
         # TODO: Call the save image function.
         print("TODO: Call the save image function.")
-        # After successfully saving the image, disable reset button
-        # and enable the text field.
-        App.get_running_app().reset_btn_disabled = True
-        App.get_running_app().textfield_disabled = False
-        # Clear text field.
-        self.ids.main_text_field.text = '' 
 
     def on_reset_button_click(self):
         """Popup warning dialog."""
         # Set reset button warning popup values.
+        self.warning_type = self.WARNING_TYPE.RESET
         self.popup_user_notification( \
             'Are you sure you want to reset the image?', self.MESSAGE_TYPE.WARNING)
 
     def execute_reset(self):
-        """
-        If the user click "yes" on the warning dialog disable the reset button
-        and call the method rest_image(); otherwise, do nothing.
-        The method is called from dialog.kv file.
-        Reset button is enable/disabled in the dialog.kv file.
-        """
+        """Call the method reset_image()"""    
         MainWidget.display_image.reset_image()
+
+    def update_warning_btn_yes(self, warning_btn_yes):
+        """
+        If the user click "yes" on the warning dialog,
+        disable the reset button and call the method execute_reset/execute_save;
+        otherwise, do nothing.
+        The method is called from dialog.kv file.
+        """
+        if warning_btn_yes:
+            if self.warning_type == self.WARNING_TYPE.RESET:
+                self.update_textfield_input() # Reset the textfield.
+                self.execute_reset()
+                App.get_running_app().reset_btn_disabled = True
+                App.get_running_app().textfield_disabled = False
+
+            if self.warning_type == self.WARNING_TYPE.SAVE: # TODO: Save image popup
+                #self.execute_save()
+                # After successfully saving the image, disable reset button
+                # and enable the text field.
+                App.get_running_app().reset_btn_disabled = True
+                App.get_running_app().textfield_disabled = False
+                self.ids.main_text_field.text = '' # Clear text field.
+        else:
+            if self.warning_type == self.WARNING_TYPE.RESET:
+                App.get_running_app().reset_btn_disabled = False
 
     def update_main_widgets(self, *args):
         """

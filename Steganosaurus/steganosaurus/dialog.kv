@@ -49,9 +49,7 @@
             width: "110dp"
             height: "40dp"
             text: "Yes"
-            on_press: app.root.execute_reset()
-            on_press: app.reset_btn_disabled = True
-            on_press: app.textfield_disabled = False
+            on_press: app.root.update_warning_btn_yes(True)
             on_release: root.parent.parent.parent.dismiss()
         RoundedCornerButton:
             id: popup_btn_no
@@ -62,7 +60,7 @@
             size_hint: None, None
             width: "110dp"
             height: "40dp"
-            on_press: app.reset_btn_disabled = False
+            on_press: app.root.update_warning_btn_yes(False)
             on_release: root.parent.parent.parent.dismiss()
 
 <InfoAndErrorDialog@BoxLayout>:
