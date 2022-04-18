@@ -160,7 +160,7 @@
             pos: self.pos
 
 <FileChooserPopup>:
-    title: "File Chooser"
+    title: "Choose Your Image"
     BoxLayout:
         id: file_chooser_popup
         size: root.size
@@ -181,4 +181,5 @@
             Button:
                 text: "Load"
                 # TODO: Need to add load file code.
+                # goes to stego.load_list()
                 on_release: root.load_list()
