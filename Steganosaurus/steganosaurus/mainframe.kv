@@ -93,7 +93,7 @@
         height: self.texture_size[1]
 
     TextInput:
-        id: encode_text_input
+        id: main_text_field
         size_hint: None, None
         size: "500dp", "150dp"
         text: root.textfield_str
@@ -106,7 +106,8 @@
         size_hint: None, None
         size: "500dp", "30dp"
         Label:
-            text: "(" + str(len(encode_text_input.text)) + "/" + root.maximum_char_count +")"
+            # Display remaining avaliable input char count, and max char count
+            text: "(" + (str(root.maximum_char_count - len(main_text_field.text))) + "/" + str(root.maximum_char_count) +")"
             text_size: self.width, None
             size_hint_y: None
             halign: 'right'

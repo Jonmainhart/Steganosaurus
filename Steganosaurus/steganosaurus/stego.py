@@ -24,7 +24,7 @@ from kivy.uix.floatlayout  import FloatLayout
 from kivy.lang import Builder
 from kivy.config import Config
 from kivy.factory import Factory
-from kivy.properties import StringProperty, BooleanProperty
+from kivy.properties import StringProperty, BooleanProperty, NumericProperty
 from kivy.uix.popup import Popup
 from models import ImageObject
 from kivy.clock import Clock
@@ -45,12 +45,11 @@ class MainWidget(GridLayout):
     reset_btn_disabled = BooleanProperty(True)
     user_notification_msg = StringProperty('Display Text Field Related Warning Message')
     textfield_str = StringProperty('')
-    maximum_char_count = StringProperty('0')
 
     # this is the object to be referenced by all other functions
     # initialize with the default constructor
     display_image = ImageObject()
-    maximum_char_count = StringProperty(str(display_image.max_available_chars))
+    maximum_char_count = NumericProperty(display_image.max_available_chars)
 
     def popup_user_notification(self, message, message_type):
 
