@@ -13,7 +13,6 @@
 # -------------------------------------
 #: import Factory kivy.factory.Factory
 #: import utils kivy.utils
-
 <MainWidget>:
     id: main_widget
     rows: 4
@@ -36,7 +35,7 @@
             padding: "20dp"
             spacing: "15dp"
             RoundedCornerButton:
-                id: "temporary_btn_id1"
+                id: open_btn
                 text_size: self.width, None
                 font_size: self.width/8
                 halign: 'center'
@@ -45,33 +44,28 @@
                 height: "40dp"
                 text: "Open Image"
                 on_release: root.on_open_button_click() # TODO
-                #on_release: Factory.FileChooserPopup()
             RoundedCornerButton:
-                id: "temporary_btn_id2"
+                id: encode_btn
                 text_size: self.width, None
                 font_size: self.width/8
                 halign: 'center'
                 size_hint: None, None
                 width: "110dp"
                 height: "40dp"
-                text: "Warning Dialog"
-                on_release: root.popup_user_notification(self,'') # TODO
-                #on_release: Factory.InfoAndErrorPopup().open()
+                text: "Encode Image"
+                on_release: root.on_encode_button_click()
             RoundedCornerButton:
-                id: "temporary_btn_id3"
+                id: save_btn
                 text_size: self.width, None
                 font_size: self.width/8
                 halign: 'center'
                 size_hint: None, None
                 width: "110dp"
                 height: "40dp"
-                text: "Info/Error Dialog"
-                #text: "Save Image"
-                on_release: root.popup_user_notification(self, '') # TODO
-                #on_release: root.on_save_button_click() # TODO
-                #on_release: Factory.WarningPopup().open()
+                text: "Save Image"
+                on_release: root.on_save_button_click() # TODO
             RoundedCornerButton:
-                id: "temporary_btn_id4"
+                id: reset_btn
                 text_size: self.width, None
                 font_size: self.width/8
                 halign: 'center'
@@ -79,9 +73,9 @@
                 width: "110dp"
                 height: "40dp"
                 text: "Reset Image"
-                disabled: root.reset_btn_disabled
-                on_release: root.on_reset_button_click() # TODO
-                #on_release: Factory.InfoAndErrorPopup().open()
+                disabled: app.reset_btn_disabled
+                on_release: Factory.WarningPopup().open()
+
     MessageLabel: #DialogNotificationLabel
         size_hint: None, None
         size: "280dp", "20dp"
@@ -96,7 +90,7 @@
         id: main_text_field
         size_hint: None, None
         size: "500dp", "150dp"
-        text: root.textfield_str
+        text: "" #root.textfield_str
         hint_text: "Enter scecret message here" # Place holder
         multiline: False
         on_text_validate:  root.on_text_validate(self)  # When press enterm
@@ -106,8 +100,7 @@
         size_hint: None, None
         size: "500dp", "30dp"
         Label:
-            # Display remaining avaliable input char count, and max char count
-            text: "(" + (str(root.maximum_char_count - len(main_text_field.text))) + "/" + str(root.maximum_char_count) +")"
+            text: "(" + (str(root.maximum_char_count - len(main_text_field.text))) + "/" + str(root.maximum_char_count) +")"  # bug@2
             text_size: self.width, None
             size_hint_y: None
             halign: 'right'
@@ -117,7 +110,7 @@
 <WarningPopup@Popup>:
     id: warning_dialog
     auto_dismiss: False
-    title: "contents (%s)"%(app.message_type) # Display Message Type
+    title: "%s"%(app.message_type) # Display Message Type
     size_hint: None, None
     size: "300dp", "300dp"
     pos_hint: {'center_x': .5,'center_y': .5}
@@ -126,7 +119,7 @@
 <InfoAndErrorPopup@Popup>:
     id: info_error_dialog
     auto_dismiss: False
-    title: "contents (%s)"%(app.message_type) # Display Message Type
+    title: "%s"%(app.message_type) # Display Message Type
     size_hint: None, None
     size: "300dp", "300dp"
     pos_hint: {'center_x': .5,'center_y': .5}
@@ -150,7 +143,7 @@
             pos: self.pos
             radius: [25]
 
-<MessageLabel@Label>:
+<MessageLabel@Label>: # TODO: Delete if not using.
     background_color: (0,0,0,0)
     background_normal: "white"
     canvas.before:

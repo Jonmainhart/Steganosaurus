@@ -29,6 +29,7 @@ from kivy.uix.popup import Popup
 from models import ImageObject
 from kivy.clock import Clock
 from kivy.core.window import Window
+from enum import Enum
 # import PIL for image processing
 from PIL import Image
 
@@ -42,7 +43,8 @@ class MainWidget(GridLayout):
         super().__init__(**kwargs)
         Clock.schedule_interval(self.update_image, .1) # Schedule the function call.
     
-    reset_btn_disabled = BooleanProperty(True)
+    # Use enum to define different message types.
+    MESSAGE_TYPE = Enum('MESSAGE_TYPE', 'INFO ERROR WARNING')
     user_notification_msg = StringProperty('Display Text Field Related Warning Message')
     textfield_str = StringProperty('')
 
@@ -52,43 +54,53 @@ class MainWidget(GridLayout):
     maximum_char_count = NumericProperty(display_image.max_available_chars)
 
     def popup_user_notification(self, message, message_type):
-
+        """Displays user notification popup dialog.
         
-        # TODO: Replace with validating message_type
-        if self.get_id(message) == '"temporary_btn_id2"':
-            App.get_running_app().message = 'Warning Message!'
-            App.get_running_app().message_type = 'Warning'
+        Args:
+            message: the text message will be displayed.
+            message_type: enum 
+        """
+        App.get_running_app().message = message # Assign popup message.
+        if message_type == self.MESSAGE_TYPE.WARNING: # Validate message type.
+            App.get_running_app().message_type = 'Warning' # Assign message type.
             Factory.WarningPopup().open()
-        else:
-            App.get_running_app().message = 'Info/Error Message'
+        
+        if message_type == self.MESSAGE_TYPE.INFO or message_type == self.MESSAGE_TYPE.ERROR:
             App.get_running_app().message_type = 'Info/Error'
             Factory.InfoAndErrorPopup().open()
 
     def on_open_button_click(self):
+        """Call the method show_load_list() to open the file chooser dialog."""
         self.display_image = FileChooserPopup().show_load_list()
 
     def on_encode_button_click(self):
-        # TODO: If encode button is clicked/done
-        # reset_btn_disabled = BooleanProperty(False)
-        pass
-
+        """Call the method encode_image() and enable the reset button."""
+        MainWidget.display_image.encode_image(MainWidget.display_image.filename)
+        # Only enable reset button, after successfully encoding the image.
+        App.get_running_app().reset_btn_disabled = False
+        # Set reset button warning popup values.
+        App.get_running_app().message = 'Are you sure you want to reset the image?'
+        App.get_running_app().message_type = 'Warning'
+        
     def on_save_button_click(self):
-        pass
-        # print("Save Image button is clicked")
+        """Call the method save_image() and disable the reset button."""
+        # TODO: Call the save image function.
+        print("TODO: Call the save image function.")
+        # After successfully saving the image, disable reset button.
+        App.get_running_app().reset_btn_disabled = BooleanProperty(True)
 
     def on_reset_button_click(self):
+        """If the user click "yes" on the warning dialog disable the reset button
+        and call the method rest_image(); otherwise, do nothing.
+        This method is called from dialog.kv file"""
         MainWidget.display_image.reset_image()
-
+        # After successfully resetting the image, disable reset button.
+        App.get_running_app().reset_btn_disabled = BooleanProperty(True)
+        
     def update_image(self, *args):
         # Update the image source.
         self.ids.main_image.source = MainWidget.display_image.filename
 
-    # Temporary function to get widget id from mainframe.
-    # To display different popup windows.
-    def get_id(self,  obj):
-        for id, widget in self.ids.items():
-            if widget.__self__ == obj:
-                return id
 
 class FileChooserPopup(Popup):
 
@@ -122,8 +134,10 @@ class FileChooserPopup(Popup):
             im = Image.open(self.file_path)
             # if it is an image, verify if the image is not corrupted
             im.verify()
-             # assign to display_image in main window
+            # assign to display_image in main window
             MainWidget.display_image = ImageObject(filename=self.file_path)
+            # After successfully uploaded image, disable the reset button.
+            App.get_running_app().reset_btn_disabled = BooleanProperty(True)
             # refresh window
             print(MainWidget.display_image.filename)
 
@@ -133,8 +147,7 @@ class FileChooserPopup(Popup):
         except Exception:
             pass
             # MainWidget.popup_user_notification(self,"Invalid file, please choose a valid image" +
-            # " file ending with .jpg,.jpeg, or .png", "ERROR") 
-       
+            # " file ending with .jpg,.jpeg, or .png", "ERROR")  
 
     def dismiss_popup(self):
         pass
@@ -148,8 +161,9 @@ class FileChooserPopup(Popup):
 
 class MainFrame(App):
 
-    message = 'message'
-    message_type = 'message_type'
+    message = ''
+    message_type = ''
+    reset_btn_disabled = BooleanProperty(True)
 
     # use this path to load logo images
     LOGO_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '../assets/stego.png'))
