@@ -43,7 +43,7 @@
                 width: "110dp"
                 height: "40dp"
                 text: "Open Image"
-                on_release: root.on_open_button_click() # TODO
+                on_release: root.on_open_button_click()
             RoundedCornerButton:
                 id: encode_btn
                 text_size: self.width, None
@@ -90,17 +90,20 @@
         id: main_text_field
         size_hint: None, None
         size: "500dp", "150dp"
-        text: "" #root.textfield_str
+        text: root.textfield_str
         hint_text: "Enter scecret message here" # Place holder
         multiline: False
-        on_text_validate:  root.on_text_validate(self)  # When press enterm
-    AnchorLayout:  
+        disabled: app.textfield_disabled
+        on_text_validate: root.on_text_validate(self)  # When press enter
+
+    AnchorLayout: 
         anchor_x: 'right'
         anchor_y: 'center'
         size_hint: None, None
         size: "500dp", "30dp"
         Label:
-            text: "(" + (str(root.maximum_char_count - len(main_text_field.text))) + "/" + str(root.maximum_char_count) +")"  # bug@2
+            id: input_char_count 
+            text: "(" + (str(root.maximum_char_count - len(main_text_field.text))) + "/" + str(root.maximum_char_count) +")"
             text_size: self.width, None
             size_hint_y: None
             halign: 'right'
@@ -176,4 +179,5 @@
                 text: "Load"
                 # TODO: Need to add load file code.
                 # goes to stego.load_list()
+                on_press: app.root.update_textfield_input() # After loading image, decode image then display msg
                 on_release: root.load_list()

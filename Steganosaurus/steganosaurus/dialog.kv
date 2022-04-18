@@ -51,6 +51,7 @@
             text: "Yes"
             on_press: app.root.execute_reset()
             on_press: app.reset_btn_disabled = True
+            on_press: app.textfield_disabled = False
             on_release: root.parent.parent.parent.dismiss()
         RoundedCornerButton:
             id: popup_btn_no

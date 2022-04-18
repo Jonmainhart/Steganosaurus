@@ -41,20 +41,23 @@ Builder.load_file(os.path.abspath(os.path.join(os.path.dirname(__file__), 'dialo
 class MainWidget(GridLayout):
     def __init__(self, **kwargs):  #kivy constructor takes 2 arguments.
         super().__init__(**kwargs)
-        Clock.schedule_interval(self.update_image, .1) # Schedule the function call.
+        # Schedule the function call to update image,
+        # remaning and maximum_char_count and text field.
+        Clock.schedule_interval(self.update_main_widgets, .1) 
     
     # Use enum to define different message types.
     MESSAGE_TYPE = Enum('MESSAGE_TYPE', 'INFO ERROR WARNING')
     user_notification_msg = StringProperty('Display Text Field Related Warning Message')
-    textfield_str = StringProperty('')
 
     # this is the object to be referenced by all other functions
     # initialize with the default constructor
     display_image = ImageObject()
     maximum_char_count = NumericProperty(display_image.max_available_chars)
+    textfield_str = StringProperty(display_image.decode_image())
 
     def popup_user_notification(self, message, message_type):
-        """Displays user notification popup dialog.
+        """
+        Displays user notification popup dialog.
         
         Args:
             message: the text message will be displayed.
@@ -75,32 +78,57 @@ class MainWidget(GridLayout):
 
     def on_encode_button_click(self):
         """Call the method encode_image() and enable the reset button."""
-        MainWidget.display_image.encode_image(MainWidget.display_image.filename)
+        # Passing text field input to ecode method.
+        MainWidget.display_image.encode_image(self.ids.main_text_field.text)
         # Only enable reset button, after successfully encoding the image.
         App.get_running_app().reset_btn_disabled = False
+        # After finidhing encoding, disable the textfield modification.
+        App.get_running_app().textfield_disabled = True
         
     def on_save_button_click(self):
         """Call the method save_image() and disable the reset button."""
         # TODO: Call the save image function.
         print("TODO: Call the save image function.")
-        # After successfully saving the image, disable reset button.
-        App.get_running_app().reset_btn_disabled = BooleanProperty(True)
+        # After successfully saving the image, disable reset button
+        # and enable the text field.
+        App.get_running_app().reset_btn_disabled = True
+        App.get_running_app().textfield_disabled = False
+        # Clear text field.
+        self.ids.main_text_field.text = '' 
 
     def on_reset_button_click(self):
         """Popup warning dialog."""
         # Set reset button warning popup values.
-        self.popup_user_notification('Are you sure you want to reset the image?', self.MESSAGE_TYPE.WARNING)
+        self.popup_user_notification( \
+            'Are you sure you want to reset the image?', self.MESSAGE_TYPE.WARNING)
 
     def execute_reset(self):
-        """If the user click "yes" on the warning dialog disable the reset button
+        """
+        If the user click "yes" on the warning dialog disable the reset button
         and call the method rest_image(); otherwise, do nothing.
         The method is called from dialog.kv file.
-        Reset button is enable/disabled in the dialog.kv file."""
+        Reset button is enable/disabled in the dialog.kv file.
+        """
         MainWidget.display_image.reset_image()
 
-    def update_image(self, *args):
-        # Update the image source.
+    def update_main_widgets(self, *args):
+        """
+        Update the main GUI widgets(image source, 
+        remaining and maximum_char_count) values and
+        assign new decoded image message to the variable self.textfield_str.
+        """
         self.ids.main_image.source = MainWidget.display_image.filename
+        self.ids.input_char_count.text = "(" \
+            + (str(MainWidget.display_image.max_available_chars - len(self.ids.main_text_field.text))) \
+            + "/" + str(MainWidget.display_image.max_available_chars) +")"
+        self.textfield_str = MainWidget.display_image.decode_image()
+
+    def update_textfield_input(self):
+        """
+        Assign the value of self.textfield_str 
+        to the main GUI TextField text attribute.
+        """
+        self.ids.main_text_field.text = self.textfield_str
 
 class FileChooserPopup(Popup):
 
@@ -136,8 +164,10 @@ class FileChooserPopup(Popup):
             im.verify()
             # assign to display_image in main window
             MainWidget.display_image = ImageObject(filename=self.file_path)
-            # After successfully uploaded image, disable the reset button.
-            App.get_running_app().reset_btn_disabled = BooleanProperty(True)
+            # After successfully uploades image, disable the reset button
+            # and enable the textfield.     
+            App.get_running_app().reset_btn_disabled = True
+            App.get_running_app().textfield_disabled = False
             # refresh window
             print(MainWidget.display_image.filename)
 
@@ -164,6 +194,7 @@ class MainFrame(App):
     message = ''
     message_type = ''
     reset_btn_disabled = BooleanProperty(True)
+    textfield_disabled = BooleanProperty(False)
 
     # use this path to load logo images
     LOGO_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '../assets/stego.png'))
