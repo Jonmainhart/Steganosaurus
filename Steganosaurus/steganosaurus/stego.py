@@ -78,9 +78,6 @@ class MainWidget(GridLayout):
         MainWidget.display_image.encode_image(MainWidget.display_image.filename)
         # Only enable reset button, after successfully encoding the image.
         App.get_running_app().reset_btn_disabled = False
-        # Set reset button warning popup values.
-        App.get_running_app().message = 'Are you sure you want to reset the image?'
-        App.get_running_app().message_type = 'Warning'
         
     def on_save_button_click(self):
         """Call the method save_image() and disable the reset button."""
@@ -90,17 +87,20 @@ class MainWidget(GridLayout):
         App.get_running_app().reset_btn_disabled = BooleanProperty(True)
 
     def on_reset_button_click(self):
+        """Popup warning dialog."""
+        # Set reset button warning popup values.
+        self.popup_user_notification('Are you sure you want to reset the image?', self.MESSAGE_TYPE.WARNING)
+
+    def execute_reset(self):
         """If the user click "yes" on the warning dialog disable the reset button
         and call the method rest_image(); otherwise, do nothing.
-        This method is called from dialog.kv file"""
+        The method is called from dialog.kv file.
+        Reset button is enable/disabled in the dialog.kv file."""
         MainWidget.display_image.reset_image()
-        # After successfully resetting the image, disable reset button.
-        App.get_running_app().reset_btn_disabled = BooleanProperty(True)
-        
+
     def update_image(self, *args):
         # Update the image source.
         self.ids.main_image.source = MainWidget.display_image.filename
-
 
 class FileChooserPopup(Popup):
 

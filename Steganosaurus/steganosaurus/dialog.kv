@@ -49,7 +49,8 @@
             width: "110dp"
             height: "40dp"
             text: "Yes"
-            on_press: app.root.on_reset_button_click() # @Reset
+            on_press: app.root.execute_reset()
+            on_press: app.reset_btn_disabled = True
             on_release: root.parent.parent.parent.dismiss()
         RoundedCornerButton:
             id: popup_btn_no
@@ -60,6 +61,7 @@
             size_hint: None, None
             width: "110dp"
             height: "40dp"
+            on_press: app.reset_btn_disabled = False
             on_release: root.parent.parent.parent.dismiss()
 
 <InfoAndErrorDialog@BoxLayout>:

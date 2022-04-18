@@ -74,7 +74,7 @@
                 height: "40dp"
                 text: "Reset Image"
                 disabled: app.reset_btn_disabled
-                on_release: Factory.WarningPopup().open()
+                on_release: root.on_reset_button_click()
 
     MessageLabel: #DialogNotificationLabel
         size_hint: None, None
