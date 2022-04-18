@@ -29,6 +29,8 @@ from kivy.uix.popup import Popup
 from models import ImageObject
 from kivy.clock import Clock
 from kivy.core.window import Window
+# import PIL for image processing
+from PIL import Image
 
 # Set window size.
 Window.size = (550, 500)
@@ -96,7 +98,15 @@ class FileChooserPopup(Popup):
         Factory.FileChooserPopup().open()
 
     def selected(self,filename):
+        """called by FileChooserPopup Widget in mainframe.kv"""
         try:
+            # setting this item to a list, the 0th item in the list
+            # which is the filename
+            # from mainframe.kv file
+            # Image:
+            #   id: file_image
+            #   source: ""
+            # NOTE: set on file click, not load button click
             self.ids.file_image.source = filename[0]
             # assign to local
             self.file_path = os.path.abspath(filename[0])
@@ -105,16 +115,34 @@ class FileChooserPopup(Popup):
             pass # TODO: Specify Exceptions
 
     def load_list(self):
-        # assign to display_image in main window
-        MainWidget.display_image = ImageObject(filename=self.file_path)
-        # refresh window
-        print(MainWidget.display_image.filename)
+        """On load button, file processed here"""
+        # check whether this image is actually an image or not
+        # when load button is pressed
+        try:
+            im = Image.open(self.file_path)
+            # if it is an image, verify if the image is not corrupted
+            im.verify()
+             # assign to display_image in main window
+            MainWidget.display_image = ImageObject(filename=self.file_path)
+            # refresh window
+            print(MainWidget.display_image.filename)
 
-        # dismiss popup
-        self.dismiss()
+            # dismiss popup
+            self.dismiss()
+        # throw a "not an image" popup
+        except Exception:
+            pass  
+       
 
     def dismiss_popup(self):
         pass
+
+    # saving the image
+    def save_image_to_machine(self, path, filename):
+        with open(os.path.join(path, filename), 'w') as stream:
+            stream.write(self.text_input.text)
+
+        self.dismiss_popup()
 
 class MainFrame(App):
 
