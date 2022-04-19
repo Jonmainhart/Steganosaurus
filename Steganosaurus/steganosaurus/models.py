@@ -134,20 +134,26 @@ class ImageObject:
         msg = ''
         image_data = iter(self.rgb_pixel_data)
 
-        while(True): # TODO - refactor to eliminate while true
-            pixels = [value for value in image_data.__next__()[:3] + image_data.__next__()[:3] + image_data.__next__()[:3]]
+        try:
+            print()
+            while(True): # TODO - refactor to eliminate while true
+                pixels = [value for value in image_data.__next__()[:3] + image_data.__next__()[:3] + image_data.__next__()[:3]]
+                bin_str = ''
 
-            bin_str = ''
+                for i in pixels[:8]:
+                    if (i % 2 == 0):
+                        bin_str += '0'
+                    else:
+                        bin_str += '1'
+                
+                msg += chr(int(bin_str, 2))
+                if (pixels[-1] % 2 != 0):
+                    return msg
+        except StopIteration:
+            # Hacky fix to catch the StopIteration issue that occurs with some images
+            # that do not have anything encoded. 
+            pass
 
-            for i in pixels[:8]:
-                if (i % 2 == 0):
-                    bin_str += '0'
-                else:
-                    bin_str += '1'
-            
-            msg += chr(int(bin_str, 2))
-            if (pixels[-1] % 2 != 0):
-                return msg
 
     def reset_image(self):
         """
