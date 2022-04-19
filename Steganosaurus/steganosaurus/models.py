@@ -21,6 +21,7 @@ class ImageObject:
     def __init__(self, filename=random_img()): # default constructor selects random image from assets/    
         self.filename: str = filename
         self._image = Image.open(self.filename, 'r') # private ImageCore Object
+        self._backup_image = self._image.copy()
         self.rgb_pixel_data = self._extract_pixel_data()
         self._backup_pixel_data = self.rgb_pixel_data.copy() # private - copy values instead of reference
         self.max_available_chars: int = self._calculate_max_chars()
@@ -120,6 +121,7 @@ class ImageObject:
                 y += 1
             else:
                 x += 1
+        self.decoded_message = self.decode_image()
         
     def decode_image(self) -> str:
         """
@@ -158,6 +160,9 @@ class ImageObject:
         """
         Resets image to original pixel values.
         """
+        # reset pixel data to backup
         self.rgb_pixel_data = self._backup_pixel_data.copy()
-
-
+        # reset image to backup
+        self._image = self._backup_image.copy()
+        # reset decoded message
+        self.decoded_message = self.decode_image()
