@@ -15,12 +15,14 @@ Unit tests for Stenganosaurus application.
 import pytest
 from os import path
 from models import ImageObject
+from utils import convert_message
 
 class Model:
 
     def __init__(self):
         self.test_image = ImageObject(filename=path.abspath(path.join(path.dirname(__file__), '../../assets/300.jpeg')))
         self.test_message = 'the quick brown fox jumps over the lazy dog'
+        
 
 class TestModel:
 
@@ -38,3 +40,17 @@ class TestModel:
         message = img.test_image.decode_image()
         assert message != img.test_message
 
+    def test_reset_image(self):
+        pass
+
+class TestUtilities:
+
+    def test_convert_message(self):
+        test_message = 'the quick brown fox jumps over the lazy dog'
+        test_list = []
+        
+        for i in test_message:
+            test_list.append(format(ord(i), '08b'))
+        
+        bin_list = convert_message(test_message)
+        assert bin_list == test_list
