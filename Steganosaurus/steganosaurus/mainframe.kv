@@ -189,18 +189,24 @@
         id: file_saver_popup
         size: root.size
         orientation: "vertical"
+        spacing: "5dp"
         FileChooserIconView:
             id: file_saver
             path: './'
-            # on_selection: text_input.text = self.selection and self.selection[0] or ''
-            on_selection: root.folder_clicked(file_saver.path, file_saver.selection)# I get the filepath where image will be saved
+            on_selection: new_image_name.text = self.selection and self.selection[0] or ''
+            #on_selection: root.folder_clicked(file_saver.path, file_saver.selection)# I get the filepath where image will be saved
+        TextInput: # Allow user to enter a new image file name.
+            id: new_image_name
+            hint_text: "Enter a new image file name without extension." # Place holder
+            size_hint: 1, None
+            height: "40dp"
+            multiline: False
         BoxLayout:
             size_hint_y: None
             height: 50
-            Button: 
+            Button:
                 text: "Cancel"
                 on_release: root.dismiss()
             Button:
                 text: "Save"
-                # root is ImageSaverPopup
-                on_press: root.save() # After clicking save button, go to save method
+                on_press: root.save(file_saver.path, new_image_name.text) # After clicking save button, go to save method
