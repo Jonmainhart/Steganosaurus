@@ -151,6 +151,10 @@ class MainWidget(GridLayout):
         """
         self.ids.main_text_field.text = self.textfield_str
 
+    # when user presses enter, maybe link this to encode button?
+    def on_text_validate(self):
+        pass
+
 class FileChooserPopup(Popup):
 
     file_path: str = ''
@@ -189,6 +193,7 @@ class FileChooserPopup(Popup):
             # and enable the textfield.     
             App.get_running_app().reset_btn_disabled = True
             App.get_running_app().textfield_disabled = False
+
             # refresh window
             print(MainWidget.display_image.filename)
 
@@ -196,9 +201,7 @@ class FileChooserPopup(Popup):
             self.dismiss()
         # throw a "not an image" popup, using pass for now until Zhihua completes method
         except Exception:
-            pass
-            # MainWidget.popup_user_notification(self,"Invalid file, please choose a valid image" +
-            # " file ending with .jpg,.jpeg, or .png", "ERROR")  
+            MainWidget.popup_user_notification(MainWidget(),'Please select a valid image file.', MainWidget.MESSAGE_TYPE.INFO)
 
     def dismiss_popup(self):
         pass
