@@ -21,6 +21,7 @@ class ImageObject:
     def __init__(self, filename=random_img()): # default constructor selects random image from assets/    
         self.filename: str = filename
         self._image = Image.open(self.filename, 'r') # private ImageCore Object
+        self._backup_image = self._image.copy()
         self.rgb_pixel_data = self._extract_pixel_data()
         self._backup_pixel_data = self.rgb_pixel_data.copy() # private - copy values instead of reference
         self.max_available_chars: int = self._calculate_max_chars()
@@ -120,6 +121,7 @@ class ImageObject:
                 y += 1
             else:
                 x += 1
+        self.decoded_message = self.decode_image()
         
     def decode_image(self) -> str:
         """
@@ -134,25 +136,33 @@ class ImageObject:
         msg = ''
         image_data = iter(self.rgb_pixel_data)
 
-        while(True): # TODO - refactor to eliminate while true
-            pixels = [value for value in image_data.__next__()[:3] + image_data.__next__()[:3] + image_data.__next__()[:3]]
+        try:
+            while(True): # TODO - refactor to eliminate while true
+                pixels = [value for value in image_data.__next__()[:3] + image_data.__next__()[:3] + image_data.__next__()[:3]]
+                bin_str = ''
 
-            bin_str = ''
+                for i in pixels[:8]:
+                    if (i % 2 == 0):
+                        bin_str += '0'
+                    else:
+                        bin_str += '1'
+                
+                msg += chr(int(bin_str, 2))
+                if (pixels[-1] % 2 != 0):
+                    return msg
+        except StopIteration:
+            # Hacky fix to catch the StopIteration issue that occurs with some images
+            # that do not have anything encoded. 
+            return ''
 
-            for i in pixels[:8]:
-                if (i % 2 == 0):
-                    bin_str += '0'
-                else:
-                    bin_str += '1'
-            
-            msg += chr(int(bin_str, 2))
-            if (pixels[-1] % 2 != 0):
-                return msg
 
     def reset_image(self):
         """
         Resets image to original pixel values.
         """
+        # reset pixel data to backup
         self.rgb_pixel_data = self._backup_pixel_data.copy()
-
-
+        # reset image to backup
+        self._image = self._backup_image.copy()
+        # reset decoded message
+        self.decoded_message = self.decode_image()
