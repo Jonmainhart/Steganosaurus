@@ -69,16 +69,12 @@ class MainWidget(GridLayout):
             App.get_running_app().message_type = 'Warning' # Assign message type.
             Factory.WarningPopup().open()
         
-        if message_type == self.MESSAGE_TYPE.INFO or message_type == self.MESSAGE_TYPE.ERROR:
-            App.get_running_app().message_type = 'Info/Error'
+        if message_type == self.MESSAGE_TYPE.INFO:
+            App.get_running_app().message_type = 'Info'
             Factory.InfoAndErrorPopup().open()
-        # for saving
-        if message_type == self.WARNING_TYPE.WARNINGSAVE:
-            App.get_running_app().message_type = 'Warning'
-            Factory.InfoAndErrorPopup().open()
-
-        if message_type == self.MESSAGE_TYPE.SAVED:
-            App.get_running_app().message_type = 'Info/Error'
+        
+        if message_type == self.MESSAGE_TYPE.ERROR:
+            App.get_running_app().message_type = 'Error'
             Factory.InfoAndErrorPopup().open()
 
     def on_open_button_click(self):
@@ -175,7 +171,7 @@ class MainWidget(GridLayout):
                 print("image not loaded\n")
                 raise Exception
         except Exception:
-            MainWidget.popup_user_notification(MainWidget(),'Please select a valid image file to save', MainWidget.MESSAGE_TYPE.INFO)
+            self.popup_user_notification('Please select a valid image file to save', MainWidget.MESSAGE_TYPE.INFO)
 
 # global file_path to be shared between ImageSaverPopup and ImageChooserPopup for saving
 class ImageSaverPopup(Popup):
@@ -202,12 +198,15 @@ class ImageSaverPopup(Popup):
         print(f"Image {im}\n")
         Factory.ImageSaverPopup().open()
 
-    def save(self):
+    def save(self, filepath, filename):
         """On save button, file saved here"""
         try:
             print(f"File path string {MainWidget.display_image.filename}\n")
+            MainWidget.display_image.save_image(filepath, filename + '.png') # Pass filepath and file name.
             # dismiss popup after saving
             self.dismiss()
+
+            #Reset main GUI
             # verify user wants to save 
             # Zhihua can you explain the popups I had trouble implementing them correctly they are kind of confusing
             # There will be 3 popups for saving:
@@ -271,9 +270,6 @@ class ImageChooserPopup(Popup):
         # throw a "not an image" popup
         except Exception:
             MainWidget.popup_user_notification(MainWidget(),'Please select a valid image file.', MainWidget.MESSAGE_TYPE.INFO)
-
-    
-
 
     def dismiss_popup(self):
         pass
