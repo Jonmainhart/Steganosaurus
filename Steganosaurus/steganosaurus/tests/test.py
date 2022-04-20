@@ -35,6 +35,19 @@ class TestModel:
         # [(300 x 300 pix) * 3 color values per pixel] / (8 bits per char + 1 control bit) 
         assert img.test_image.max_available_chars == 30000
 
+    def test_max_char_2(self):
+        img = ImageObject(filename=path.abspath(path.join(path.dirname(__file__), '../../assets/test_image_1.jpeg')))
+        # 5 x 5 pixel image will result in 8 chars
+        assert img.max_available_chars == 8
+
+    def test_max_char_overflow(self):
+        img = ImageObject(filename=path.abspath(path.join(path.dirname(__file__), '../../assets/test_image_1.jpeg')))
+        # string is max chars
+        msg = '01234567'
+        img.encode_image(msg)
+        encoded_msg = img.decode_image()
+        assert encoded_msg == msg
+
     def test_encode_image(self):
         img = Model()
         img.test_image.encode_image(img.test_message)
