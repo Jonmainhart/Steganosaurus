@@ -24,7 +24,7 @@ from kivy.uix.floatlayout  import FloatLayout
 from kivy.lang import Builder
 from kivy.config import Config
 from kivy.factory import Factory
-from kivy.properties import StringProperty, BooleanProperty, NumericProperty
+from kivy.properties import StringProperty, BooleanProperty, NumericProperty, ObjectProperty
 from kivy.uix.popup import Popup
 from models import ImageObject
 from kivy.clock import Clock
@@ -46,11 +46,10 @@ class MainWidget(GridLayout):
         Clock.schedule_interval(self.update_main_widgets, .1) 
     
     # Use enum to define different message types.
-    MESSAGE_TYPE = Enum('MESSAGE_TYPE', 'INFO ERROR WARNING')
-    WARNING_TYPE = Enum('WARNING_TYPE', 'SAVE RESET')
+    MESSAGE_TYPE = Enum('MESSAGE_TYPE', 'INFO ERROR WARNING SAVED')
+    WARNING_TYPE = Enum('WARNING_TYPE', 'WARNINGSAVE RESET')
     user_notification_msg = StringProperty('Display Text Field Related Warning Message')
     warning_type = ''
-
     # this is the object to be referenced by all other functions
     # initialize with the default constructor
     display_image = ImageObject()
@@ -73,10 +72,18 @@ class MainWidget(GridLayout):
         if message_type == self.MESSAGE_TYPE.INFO or message_type == self.MESSAGE_TYPE.ERROR:
             App.get_running_app().message_type = 'Info/Error'
             Factory.InfoAndErrorPopup().open()
+        # for saving
+        if message_type == self.WARNING_TYPE.WARNINGSAVE:
+            App.get_running_app().message_type = 'Warning'
+            Factory.InfoAndErrorPopup().open()
+
+        if message_type == self.MESSAGE_TYPE.SAVED:
+            App.get_running_app().message_type = 'Info/Error'
+            Factory.InfoAndErrorPopup().open()
 
     def on_open_button_click(self):
         """Call the method show_load_list() to open the file chooser dialog."""
-        self.display_image = FileChooserPopup().show_load_list()
+        self.display_image = ImageChooserPopup().show_load_list()
 
     def on_encode_button_click(self):
         """Call the method encode_image() and enable the reset button."""
@@ -86,15 +93,12 @@ class MainWidget(GridLayout):
         App.get_running_app().reset_btn_disabled = False
         # After finidhing encoding, disable the textfield modification.
         App.get_running_app().textfield_disabled = True
-        
-    def on_save_button_click(self):
-        """Call the method save_image() and disable the reset button."""
+
+
         # Set reset button warning popup values.
-        self.warning_type = self.WARNING_TYPE.SAVE
-        self.popup_user_notification( \
-            'Are you sure you want to overwrite the image?', self.MESSAGE_TYPE.WARNING)
-        # TODO: Call the save image function.
-        print("TODO: Call the save image function.")
+        # self.warning_type = self.WARNING_TYPE.SAVE
+        # self.popup_user_notification( \
+        #    'Are you sure you want to overwrite the image?', self.MESSAGE_TYPE.WARNING)
 
     def on_reset_button_click(self):
         """Popup warning dialog."""
@@ -155,18 +159,83 @@ class MainWidget(GridLayout):
     def on_text_validate(self):
         pass
 
-class FileChooserPopup(Popup):
+    def on_save_button_click(self):
+        """ check if GUI has image loaded"""
+        try:
+            # check if the image is loaded onto the screen
+            # which means an image was chosen
+            if not MainWidget.display_image is None:
+                print("*** MainWidget.on_save_button_click() data check ***\n")
+                print(f"Image loaded {MainWidget.display_image.filename}\n")
+                print(f"Image type {type(MainWidget.display_image.filename)}\n")
+                # get the file path
+                """Call the method show_load_list() to open the file chooser dialog."""
+                ImageSaverPopup().show_filechooser()
+            else:
+                print("image not loaded\n")
+                raise Exception
+        except Exception:
+            MainWidget.popup_user_notification(MainWidget(),'Please select a valid image file to save', MainWidget.MESSAGE_TYPE.INFO)
+
+# global file_path to be shared between ImageSaverPopup and ImageChooserPopup for saving
+class ImageSaverPopup(Popup):
+    # local to hold current path directory where image can be saved
+    save_dir: str = ''
+    # I am pretty sure this method should be fired whenever the user clicks on a folder
+    def folder_clicked(self,path,filename):
+        """called by ImageChooserPopup Widget in mainframe.kv"""
+        try:
+            print("*** ImageSaverPopup.folder_clicked() data check ***\n")
+            with open(os.path.join(path, filename[0])) as stream:
+                self.text_input.text = stream.read()
+
+        except:
+            pass # TODO: Specify Exceptions
+
+    def show_filechooser(self):
+        print("*** ImageSaverPopup.show_filechooser() data check ***\n")
+        print("Image Saver Popup opened\n")
+        print(f"File path string {MainWidget.display_image.filename}\n")
+        im = Image.open(MainWidget.display_image.filename)
+        # if it is an image, verify if the image is not corrupted
+        im.verify()
+        print(f"Image {im}\n")
+        Factory.ImageSaverPopup().open()
+
+    def save(self):
+        """On save button, file saved here"""
+        try:
+            print(f"File path string {MainWidget.display_image.filename}\n")
+            # dismiss popup after saving
+            self.dismiss()
+            # verify user wants to save 
+            # Zhihua can you explain the popups I had trouble implementing them correctly they are kind of confusing
+            # There will be 3 popups for saving:
+
+            # the first is a warning in case of overwriting yes no dialog
+
+            # the second is a warning just to double check if they really want to save, yes no dialog
+
+            # the third dialog will an info popup when the user tries to save in an unauthorized location. I'll add 
+            # the logic to that soon
+
+            # MainWidget.popup_user_notification(MainWidget(),'Image successfully Saved!', MainWidget.WARNING_TYPE.WARNINGSAVE)
+            # MainWidget.popup_user_notification(MainWidget(),'Image successfully Saved!', MainWidget.MESSAGE_TYPE.SAVED)
+        # throw a "not an image" popup
+        except Exception:
+            MainWidget.popup_user_notification(MainWidget(),'Please select a valid image file.', MainWidget.MESSAGE_TYPE.INFO)
+
+class ImageChooserPopup(Popup):
 
     file_path: str = ''
-
     def show_load_list(self):
-        Factory.FileChooserPopup().open()
+        Factory.ImageChooserPopup().open()
 
     def selected(self,filename):
-        """called by FileChooserPopup Widget in mainframe.kv"""
+        """called by ImageChooserPopup Widget in mainframe.kv"""
         try:
             # setting this item to a list, the 0th item in the list
-            # which is the filename
+            # which is the filename full path
             # from mainframe.kv file
             # Image:
             #   id: file_image
@@ -184,6 +253,7 @@ class FileChooserPopup(Popup):
         # check whether this image is actually an image or not
         # when load button is pressed
         try:
+            print(f"File path string {self.file_path}\n")
             im = Image.open(self.file_path)
             # if it is an image, verify if the image is not corrupted
             im.verify()
@@ -195,23 +265,19 @@ class FileChooserPopup(Popup):
             App.get_running_app().textfield_disabled = False
 
             # refresh window
-            print(MainWidget.display_image.filename)
-
+            # print(MainWidget.display_image.filename)
             # dismiss popup
             self.dismiss()
         # throw a "not an image" popup
         except Exception:
             MainWidget.popup_user_notification(MainWidget(),'Please select a valid image file.', MainWidget.MESSAGE_TYPE.INFO)
 
+    
+
+
     def dismiss_popup(self):
         pass
 
-    # saving the image
-    def save_image_to_machine(self, path, filename):
-        with open(os.path.join(path, filename), 'w') as stream:
-            stream.write(self.text_input.text)
-
-        self.dismiss_popup()
 
 class MainFrame(App):
 

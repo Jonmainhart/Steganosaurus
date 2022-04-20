@@ -64,7 +64,7 @@
                 width: "110dp"
                 height: "40dp"
                 text: "Save Image"
-                on_release: root.on_save_button_click() # TODO
+                on_release: root.on_save_button_click() # TODO root is MainWidget
             RoundedCornerButton:
                 id: reset_btn
                 text_size: self.width, None
@@ -157,19 +157,19 @@
             size: self.size
             pos: self.pos
 
-<FileChooserPopup>:
+<ImageChooserPopup>:
     title: "Choose Your Image"
     BoxLayout:
         id: file_chooser_popup
         size: root.size
         orientation: "vertical"
-        Image:
+        Image: # this is the window that will display the image before loading it onto main GUI
             id: file_image
             source: ""
         FileChooserIconView:
             id: file_chooser
             path: './'
-            on_selection: root.selected(file_chooser.selection)
+            on_selection: root.selected(file_chooser.selection) # when a file, not folder/directory is clicked
         BoxLayout:
             size_hint_y: None
             height: 50
@@ -181,4 +181,26 @@
                 # TODO: Need to add load file code.
                 # goes to stego.load_list()
                 on_press: app.root.update_textfield_input() # After loading image, decode image then display msg
-                on_release: root.load_list()
+                on_release: root.load_list() # root is ImageChooserPopup
+
+<ImageSaverPopup>: # root is ImageSaverPopup
+    title: "Choose folder location where image is to be saved"
+    BoxLayout:
+        id: file_saver_popup
+        size: root.size
+        orientation: "vertical"
+        FileChooserIconView:
+            id: file_saver
+            path: './'
+            # on_selection: text_input.text = self.selection and self.selection[0] or ''
+            on_selection: root.folder_clicked(file_saver.path, file_saver.selection)# I get the filepath where image will be saved
+        BoxLayout:
+            size_hint_y: None
+            height: 50
+            Button: 
+                text: "Cancel"
+                on_release: root.dismiss()
+            Button:
+                text: "Save"
+                # root is ImageSaverPopup
+                on_press: root.save() # After clicking save button, go to save method
