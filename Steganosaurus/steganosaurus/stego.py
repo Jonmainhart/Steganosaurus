@@ -199,7 +199,7 @@ class FileChooserPopup(Popup):
 
             # dismiss popup
             self.dismiss()
-        # throw a "not an image" popup, using pass for now until Zhihua completes method
+        # throw a "not an image" popup
         except Exception:
             MainWidget.popup_user_notification(MainWidget(),'Please select a valid image file.', MainWidget.MESSAGE_TYPE.INFO)
 
