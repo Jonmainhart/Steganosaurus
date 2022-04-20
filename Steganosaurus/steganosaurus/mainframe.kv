@@ -193,8 +193,7 @@
         FileChooserIconView:
             id: file_saver
             path: './'
-            on_selection: new_image_name.text = self.selection and self.selection[0] or ''
-            #on_selection: root.folder_clicked(file_saver.path, file_saver.selection)# I get the filepath where image will be saved
+            on_selection: new_image_name.text = str(((self.selection[0]).split("/"))[-1]) or '' # Get overwrite image name.
         TextInput: # Allow user to enter a new image file name.
             id: new_image_name
             hint_text: "Enter a new image file name without extension." # Place holder
@@ -209,4 +208,4 @@
                 on_release: root.dismiss()
             Button:
                 text: "Save"
-                on_press: root.save(file_saver.path, new_image_name.text) # After clicking save button, go to save method
+                on_press: app.root.save(file_saver.path, new_image_name.text) # After clicking save button, go to save method

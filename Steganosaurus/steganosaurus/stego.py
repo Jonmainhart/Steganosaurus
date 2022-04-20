@@ -11,6 +11,7 @@ April 12, 2022
 
 MainFrame classes for Steganosaurus.
 """
+from xmlrpc.client import Boolean
 from kivy.config import Config
 # Set window non-resizable, before creating the window.
 # Don't change the position of this code.
@@ -30,6 +31,7 @@ from models import ImageObject
 from kivy.clock import Clock
 from kivy.core.window import Window
 from enum import Enum
+from pathlib import Path
 # import PIL for image processing
 from PIL import Image
 
@@ -49,7 +51,7 @@ class MainWidget(GridLayout):
     MESSAGE_TYPE = Enum('MESSAGE_TYPE', 'INFO ERROR WARNING SAVED')
     WARNING_TYPE = Enum('WARNING_TYPE', 'WARNINGSAVE RESET')
     user_notification_msg = StringProperty('Display Text Field Related Warning Message')
-    warning_type = ''
+    warning_type, new_filepath, new_filename = '', '', ''
     # this is the object to be referenced by all other functions
     # initialize with the default constructor
     display_image = ImageObject()
@@ -122,7 +124,8 @@ class MainWidget(GridLayout):
                 App.get_running_app().textfield_disabled = False
 
             if self.warning_type == self.WARNING_TYPE.WARNINGSAVE: # TODO: Save image popup
-                #self.execute_save()
+                self.execute_save()
+                App.get_running_app().image_saver_dismiss = True
                 # After successfully saving the image, disable reset button
                 # and enable the text field.
                 App.get_running_app().reset_btn_disabled = True
@@ -157,6 +160,7 @@ class MainWidget(GridLayout):
 
     def on_save_button_click(self):
         """ check if GUI has image loaded"""
+        App.get_running_app().image_saver_dismiss = False
         try:
             # check if the image is loaded onto the screen
             # which means an image was chosen
@@ -173,10 +177,55 @@ class MainWidget(GridLayout):
         except Exception:
             self.popup_user_notification('Please select a valid image file to save', MainWidget.MESSAGE_TYPE.INFO)
 
+    def save(self, new_filepath, new_filename):
+        """On save button, file saved here"""
+        try:
+            self.new_filepath = new_filepath
+            self.warning_type = self.WARNING_TYPE.WARNINGSAVE
+            if not ('.png' in new_filename.lower()):
+                new_filename += '.png'
+            # Validate if the user trying to overwrite image.
+            if ((Path.cwd() / new_filepath / new_filename).exists()):
+                self.new_filename = new_filename.replace("overwriting: ", '')
+                # Popup overwriting warning dialog
+                self.overwrite_bool = (self.popup_user_notification( 'Image name already exists.\n'\
+                'Are you sure you want to overwrite the image?', self.MESSAGE_TYPE.WARNING))
+            else:
+                self.new_filename = new_filename
+                # Popup warning dialog, if proceed saving image or not.
+                self.overwrite_bool = (self.popup_user_notification( \
+                'Are you sure you want to save the image?', self.MESSAGE_TYPE.WARNING))
+
+            # verify user wants to save 
+            # Zhihua can you explain the popups I had trouble implementing them correctly they are kind of confusing
+            # There will be 3 popups for saving:
+
+            # the first is a warning in case of overwriting yes no dialog
+            # Done in line line.187-192  -Z.Z.H.
+            # the second is a warning just to double check if they really want to save, yes no dialog
+            # Done in line line.194-197  -Z.Z.H.
+            # the third dialog will an info popup when the user tries to save in an unauthorized location. I'll add 
+            # the logic to that soon
+
+            # MainWidget.popup_user_notification(MainWidget(),'Image successfully Saved!', MainWidget.WARNING_TYPE.WARNINGSAVE)
+            # MainWidget.popup_user_notification(MainWidget(),'Image successfully Saved!', MainWidget.MESSAGE_TYPE.SAVED)
+        # throw a "not an image" popup
+        except Exception:
+            self.popup_user_notification('Please select a valid image file.', self.MESSAGE_TYPE.INFO)
+
+    def execute_save(self):
+        MainWidget.display_image.save_image(self.new_filepath, self.new_filename)
+
 # global file_path to be shared between ImageSaverPopup and ImageChooserPopup for saving
 class ImageSaverPopup(Popup):
+    def __init__(self, **kwargs):  #kivy constructor takes 2 arguments.
+        super().__init__(**kwargs)
+        # Schedule the function call to close the saver popup.
+        Clock.schedule_interval(self.dismiss_popup, .1) 
+
     # local to hold current path directory where image can be saved
     save_dir: str = ''
+
     # I am pretty sure this method should be fired whenever the user clicks on a folder
     def folder_clicked(self,path,filename):
         """called by ImageChooserPopup Widget in mainframe.kv"""
@@ -196,33 +245,11 @@ class ImageSaverPopup(Popup):
         # if it is an image, verify if the image is not corrupted
         im.verify()
         print(f"Image {im}\n")
-        Factory.ImageSaverPopup().open()
+        self.open()
 
-    def save(self, filepath, filename):
-        """On save button, file saved here"""
-        try:
-            print(f"File path string {MainWidget.display_image.filename}\n")
-            MainWidget.display_image.save_image(filepath, filename + '.png') # Pass filepath and file name.
-            # dismiss popup after saving
+    def dismiss_popup(self, *args):
+        if App.get_running_app().image_saver_dismiss:
             self.dismiss()
-
-            #Reset main GUI
-            # verify user wants to save 
-            # Zhihua can you explain the popups I had trouble implementing them correctly they are kind of confusing
-            # There will be 3 popups for saving:
-
-            # the first is a warning in case of overwriting yes no dialog
-
-            # the second is a warning just to double check if they really want to save, yes no dialog
-
-            # the third dialog will an info popup when the user tries to save in an unauthorized location. I'll add 
-            # the logic to that soon
-
-            # MainWidget.popup_user_notification(MainWidget(),'Image successfully Saved!', MainWidget.WARNING_TYPE.WARNINGSAVE)
-            # MainWidget.popup_user_notification(MainWidget(),'Image successfully Saved!', MainWidget.MESSAGE_TYPE.SAVED)
-        # throw a "not an image" popup
-        except Exception:
-            MainWidget.popup_user_notification(MainWidget(),'Please select a valid image file.', MainWidget.MESSAGE_TYPE.INFO)
 
 class ImageChooserPopup(Popup):
 
@@ -281,6 +308,7 @@ class MainFrame(App):
     message_type = ''
     reset_btn_disabled = BooleanProperty(True)
     textfield_disabled = BooleanProperty(False)
+    image_saver_dismiss = BooleanProperty(False)
 
     # use this path to load logo images
     LOGO_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '../assets/stego.png'))
