@@ -50,13 +50,13 @@ class TestModel:
 
     def test_encode_image(self):
         img = Model()
+        assert list(img.test_image._image.getdata()) == list(img.test_image._backup_image.getdata())
         img.test_image.encode_image(img.test_message)
         # check that the decoded image is the same as the test message
         assert img.test_image.decode_image() == img.test_message
-        # check the pixel list does not match the backup
-        assert list(img.test_image.rgb_pixel_data) != list(img.test_image._backup_pixel_data)
+        
         # check the image object does not match backup
-        assert img.test_image._image != img.test_image._backup_image
+        assert img.test_image._image.getdata() != img.test_image._backup_image.getdata()
 
     def test_decode_image(self):
         img = Model()
@@ -65,20 +65,33 @@ class TestModel:
         assert message != img.test_message
         # encode the image with the test message
         img.test_image.encode_image(img.test_message)
-        # check that the decoded message attribute matches the test message
-        assert img.test_image.decoded_message == img.test_message
         # check that the decoder produces the same test message
         assert img.test_image.decode_image() == img.test_message
 
     def test_reset_image(self):
         img = Model()
+        original_message = img.test_image.decode_image()
+
         img.test_image.encode_image(img.test_message)
-        # check the decoded message equals the test message
+        
         assert img.test_image.decode_image() == img.test_message
         # reset the image
         img.test_image.reset_image()
         # check the decoded message does not equal the test message
         assert img.test_image.decode_image() != img.test_message
+        # check the decoded message matches the original
+        assert img.test_image.decode_image() == original_message
+
+    def test_save_image(self):
+        img = ImageObject(filename=path.abspath(path.join(path.dirname(__file__), '../../assets/test_image_0.jpeg')))
+        test_message = 'the quick brown fox jumps over the lazy dog'
+        save_path = path.abspath(path.join(path.dirname(__file__), '../../assets'))
+        save_name = 'test_save_image.png'
+        img.encode_image(test_message)
+        img.save_image(save_path, save_name)
+        saved_img = ImageObject(filename=path.abspath(path.join(path.dirname(__file__), f'{save_path}/{save_name}')))
+        decoded_msg = saved_img.decode_image()
+        assert decoded_msg == test_message
 
 class TestUtilities:
 

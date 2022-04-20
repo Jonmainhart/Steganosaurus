@@ -20,36 +20,21 @@ class ImageObject:
 
     def __init__(self, filename=random_img()): # default constructor selects random image from assets/    
         self.filename: str = filename
-        self._image = Image.open(self.filename, 'r') # private ImageCore Object
-        self._backup_image = self._image.copy()
-        self.rgb_pixel_data = self._extract_pixel_data()
-        self._backup_pixel_data = self.rgb_pixel_data.copy() # private - copy values instead of reference
+        self._backup_image = Image.open(self.filename, 'r') # private ImageCore Object
+        self._image = self._backup_image.copy()
         self.max_available_chars: int = self._calculate_max_chars()
-        self.decoded_message: str = self.decode_image()
-
-    def _extract_pixel_data(self):
-        """
-        Private method to extract the pixel data from the image.
-
-        Returns:
-            _type_: ImageObject
-        """
-        
-        data = self._image.getdata()
-        return data
     
     def _calculate_max_chars(self) -> int: # returns an int to caller
         
         # counts each pixel - 300 x 300 pic returns 90,000 pix
-        num_of_pixels = len(self.rgb_pixel_data) 
+        num_of_pixels = len(self._image.getdata()) 
         
         # pixels * 3 (red, green, blue) / 9 (8-bit char + 1 control bit)
         max_chr = int(((num_of_pixels * 3) / 9)) # cast to int - division returns float
 
         return max_chr
 
-
-    def _modify_pixels(self, data: list):
+    def _modify_pixels(self, pix, data: list):
         # TODO - reduce complexity
         """
         Private.
@@ -59,13 +44,14 @@ class ImageObject:
         Adapted from https://www.geeksforgeeks.org/image-based-steganography-using-python/
 
         Args:
+            pix: Image data
             data (list): binary encoded characters
 
         Yields:
             _type_: tuple generator
         """
         data_length = len(data)
-        image_data = iter(self.rgb_pixel_data)
+        image_data = iter(pix)
 
         for i in range(data_length):
 
@@ -114,14 +100,13 @@ class ImageObject:
         w = self._image.size[0]
         (x, y) = (0, 0)
 
-        for pixel in self._modify_pixels(convert_message(user_input)):
+        for pixel in self._modify_pixels(self._image.getdata(),convert_message(user_input)):
             self._image.putpixel((x, y), pixel)
             if (x == w - 1):
                 x = 0
                 y += 1
             else:
                 x += 1
-        self.decoded_message = self.decode_image()
         
     def decode_image(self) -> str:
         """
@@ -134,7 +119,7 @@ class ImageObject:
         """
         
         msg = ''
-        image_data = iter(self.rgb_pixel_data)
+        image_data = iter(self._image.getdata())
 
         try:
             while(True): # TODO - refactor to eliminate while true
@@ -155,14 +140,20 @@ class ImageObject:
             # that do not have anything encoded. 
             return ''
 
-
     def reset_image(self):
         """
         Resets image to original pixel values.
         """
-        # reset pixel data to backup
-        self.rgb_pixel_data = self._backup_pixel_data.copy()
-        # reset image to backup
+        
         self._image = self._backup_image.copy()
-        # reset decoded message
-        self.decoded_message = self.decode_image()
+
+    def save_image(self, filepath: str, filename: str):
+        """
+        Save the image to the chosen filepath/filename
+
+        Args:
+            filepath (str): path/to/directory
+            filename (str): filename without extension
+        """
+        fp = filepath + '/' + filename
+        self._image.save(fp, format='PNG', quality=100, subsampling=0)
