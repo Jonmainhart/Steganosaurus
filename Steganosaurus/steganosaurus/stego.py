@@ -125,7 +125,7 @@ class MainWidget(GridLayout):
                 App.get_running_app().reset_btn_disabled = True
                 App.get_running_app().textfield_disabled = False
 
-            if self.warning_type == self.WARNING_TYPE.SAVE: # TODO: Save image popup
+            if self.warning_type == self.WARNING_TYPE.WARNINGSAVE: # TODO: Save image popup
                 #self.execute_save()
                 # After successfully saving the image, disable reset button
                 # and enable the text field.
