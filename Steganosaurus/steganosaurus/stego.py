@@ -49,8 +49,8 @@ class MainWidget(GridLayout):
     
     # Use enum to define different message types.
     MESSAGE_TYPE = Enum('MESSAGE_TYPE', 'INFO ERROR WARNING SAVED')
-    WARNING_TYPE = Enum('WARNING_TYPE', 'WARNINGSAVE RESET')
-    user_notification_msg = StringProperty('Display Text Field Related Warning Message')
+    WARNING_TYPE = Enum('WARNING_TYPE', 'WARNINGSAVE RESET ENCODE')
+    user_notification_msg = StringProperty('Note: In the text field below, displays default decoded message.')
     warning_type, new_filepath, new_filename = '', '', ''
     # this is the object to be referenced by all other functions
     # initialize with the default constructor
@@ -131,6 +131,8 @@ class MainWidget(GridLayout):
                 App.get_running_app().reset_btn_disabled = True
                 App.get_running_app().textfield_disabled = False
                 self.ids.main_text_field.text = '' # Clear text field.
+            if self.warning_type == self.WARNING_TYPE.ENCODE:
+                self.on_encode_button_click()
         else:
             if self.warning_type == self.WARNING_TYPE.RESET:
                 App.get_running_app().reset_btn_disabled = False
@@ -156,7 +158,10 @@ class MainWidget(GridLayout):
 
     # when user presses enter, maybe link this to encode button?
     def on_text_validate(self):
-        pass
+        self.warning_type = self.WARNING_TYPE.ENCODE
+        # Popup overwriting warning dialog
+        self.overwrite_bool = (self.popup_user_notification( \
+        'Are you sure you want to encode the image?', self.MESSAGE_TYPE.WARNING))
 
     def on_save_button_click(self):
         """ check if GUI has image loaded"""
