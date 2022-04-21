@@ -78,10 +78,10 @@
                 on_release: root.on_reset_button_click()
 
     MessageLabel: #DialogNotificationLabel
-        size_hint: None, None
-        size: "280dp", "20dp"
+        size_hint: 1, None
+        height: "20dp"
         text: root.user_notification_msg
-        font_size: self.width/20
+        font_size: self.width/35
         color: (1,0,0,1)
         text_size: self.width, None
         size_hint_y: None
@@ -93,9 +93,9 @@
         size: "500dp", "150dp"
         text: root.textfield_str
         hint_text: "Enter scecret message here" # Place holder
-        multiline: False
+        multiline: True
         disabled: app.textfield_disabled
-        on_text_validate: root.on_text_validate()  # When press enter
+        on_text_validate: root.on_text_validate() 
 
     AnchorLayout: 
         anchor_x: 'right'
@@ -199,7 +199,7 @@
             hint_text: "Enter a new image file name without extension. \nNew image will be saved as PNG format." # Place holder
             size_hint: 1, None
             height: "40dp"
-            multiline: False
+            multiline: True
         BoxLayout:
             size_hint_y: None
             height: 50
