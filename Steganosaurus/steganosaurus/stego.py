@@ -51,7 +51,9 @@ class MainWidget(GridLayout):
     MESSAGE_TYPE = Enum('MESSAGE_TYPE', 'INFO ERROR WARNING SAVED')
     WARNING_TYPE = Enum('WARNING_TYPE', 'WARNINGSAVE RESET ENCODE')
     user_notification_msg = StringProperty('Note: In the text field below, displays default decoded message.')
+    reach_input_count_warning = StringProperty('Warning: Not encodable. Maximum encode character number has been reached.')
     warning_type, new_filepath, new_filename = '', '', ''
+    encodable_bool = True
     # this is the object to be referenced by all other functions
     # initialize with the default constructor
     display_image = ImageObject()
@@ -85,18 +87,16 @@ class MainWidget(GridLayout):
 
     def on_encode_button_click(self):
         """Call the method encode_image() and enable the reset button."""
-        # Passing text field input to ecode method.
-        MainWidget.display_image.encode_image(self.ids.main_text_field.text)
-        # Only enable reset button, after successfully encoding the image.
-        App.get_running_app().reset_btn_disabled = False
-        # After finidhing encoding, disable the textfield modification.
-        App.get_running_app().textfield_disabled = True
-
-
-        # Set reset button warning popup values.
-        # self.warning_type = self.WARNING_TYPE.SAVE
-        # self.popup_user_notification( \
-        #    'Are you sure you want to overwrite the image?', self.MESSAGE_TYPE.WARNING)
+        if (self.encodable_bool):
+            # Passing text field input to ecode method.
+            MainWidget.display_image.encode_image(self.ids.main_text_field.text)
+            # Only enable reset button, after successfully encoding the image.
+            App.get_running_app().reset_btn_disabled = False
+            # After finidhing encoding, disable the textfield modification.
+            App.get_running_app().textfield_disabled = True
+        else:
+            self.popup_user_notification('Failed to execute encode function!\
+            \nPlease modify the text field input.', MainWidget.MESSAGE_TYPE.ERROR)
 
     def on_reset_button_click(self):
         """Popup warning dialog."""
@@ -139,15 +139,24 @@ class MainWidget(GridLayout):
 
     def update_main_widgets(self, *args):
         """
-        Update the main GUI widgets(image source, 
-        remaining and maximum_char_count) values and
+        Update the main GUI widgets(image source, MessageLabel
+        and remaining and maximum_char_count) values, 
         assign new decoded image message to the variable self.textfield_str.
         """
         self.ids.main_image.source = MainWidget.display_image.filename
-        self.ids.input_char_count.text = "(" \
-            + (str(MainWidget.display_image.max_available_chars - len(self.ids.main_text_field.text))) \
-            + "/" + str(MainWidget.display_image.max_available_chars) +")"
         self.textfield_str = MainWidget.display_image.decode_image()
+        self.maximum_char_count = MainWidget.display_image.max_available_chars
+        if ((len(self.ids.main_text_field.text) == 0)):
+            self.user_notification_msg = ''
+            self.encodable_bool = True
+        elif((MainWidget.display_image.max_available_chars - len(self.ids.main_text_field.text) == 0)):
+            self.user_notification_msg = 'Warning: Maximum encode character number has been reached.'
+            self.encodable_bool = True
+        elif((MainWidget.display_image.max_available_chars - len(self.ids.main_text_field.text) < 0)):
+            self.user_notification_msg ='Warning: Not encodable. '\
+            'Maximum encode characters has exceeded by '\
+            + str((len(self.ids.main_text_field.text) - MainWidget.display_image.max_available_chars))
+            self.encodable_bool = False
 
     def update_textfield_input(self):
         """
@@ -156,8 +165,10 @@ class MainWidget(GridLayout):
         """
         self.ids.main_text_field.text = self.textfield_str
 
-    # when user presses enter, maybe link this to encode button?
     def on_text_validate(self):
+        """
+        Display encode warning dialog, when user presses enter in the textfield.
+        """
         self.warning_type = self.WARNING_TYPE.ENCODE
         # Popup overwriting warning dialog
         self.overwrite_bool = (self.popup_user_notification( \
