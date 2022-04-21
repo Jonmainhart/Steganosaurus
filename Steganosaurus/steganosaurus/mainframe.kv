@@ -93,7 +93,7 @@
         size: "500dp", "150dp"
         text: root.textfield_str
         hint_text: "Enter scecret message here" # Place holder
-        multiline: False
+        multiline: True
         disabled: app.textfield_disabled
         on_text_validate: root.on_text_validate() 
 
@@ -199,7 +199,7 @@
             hint_text: "Enter a new image file name without extension. \nNew image will be saved as PNG format." # Place holder
             size_hint: 1, None
             height: "40dp"
-            multiline: False
+            multiline: True
         BoxLayout:
             size_hint_y: None
             height: 50
