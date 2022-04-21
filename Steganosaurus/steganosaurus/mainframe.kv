@@ -110,7 +110,7 @@
             text_size: self.width, None
             size_hint_y: None
             halign: 'right'
-            font_size: 30
+            font_size: self.width/30
             size_hint: 1, 1
 
 <WarningPopup@Popup>:
@@ -200,7 +200,7 @@
             id: new_image_name
             hint_text: "Enter a new image file name without extension. \nNew image will be saved as PNG format." # Place holder
             size_hint: 1, None
-            height: "40dp"
+            height: "50dp"
             multiline: True
         BoxLayout:
             size_hint_y: None
