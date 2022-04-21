@@ -78,10 +78,10 @@
                 on_release: root.on_reset_button_click()
 
     MessageLabel: #DialogNotificationLabel
-        size_hint: None, None
-        size: "280dp", "20dp"
+        size_hint: 1, None
+        height: "20dp"
         text: root.user_notification_msg
-        font_size: self.width/20
+        font_size: self.width/35
         color: (1,0,0,1)
         text_size: self.width, None
         size_hint_y: None
@@ -95,7 +95,7 @@
         hint_text: "Enter scecret message here" # Place holder
         multiline: False
         disabled: app.textfield_disabled
-        on_text_validate: root.on_text_validate()  # When press enter
+        on_text_validate: root.on_text_validate() 
 
     AnchorLayout: 
         anchor_x: 'right'
