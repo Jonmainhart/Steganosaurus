@@ -2,7 +2,7 @@
 # __main__.py
 """
 Steganosaurus
-    
+
 Linden Crandall
 Jonthan Mainhart
 Zhihua Zheng
