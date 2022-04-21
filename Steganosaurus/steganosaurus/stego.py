@@ -182,7 +182,7 @@ class MainWidget(GridLayout):
         try:
             self.new_filepath = new_filepath
             self.warning_type = self.WARNING_TYPE.WARNINGSAVE
-            if not ('.png' in new_filename.lower()):
+            if not ('.png' in new_filename.lower() or '.jpeg' in new_filename.lower() or '.jpg' in new_filename.lower()):
                 new_filename += '.png'
             # Validate if the user trying to overwrite image.
             if ((Path.cwd() / new_filepath / new_filename).exists()):
