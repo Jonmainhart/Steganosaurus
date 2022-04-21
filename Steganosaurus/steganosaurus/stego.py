@@ -48,10 +48,9 @@ class MainWidget(GridLayout):
         Clock.schedule_interval(self.update_main_widgets, .1) 
     
     # Use enum to define different message types.
-    MESSAGE_TYPE = Enum('MESSAGE_TYPE', 'INFO ERROR WARNING SAVED')
+    MESSAGE_TYPE = Enum('MESSAGE_TYPE', 'INFO ERROR WARNING')
     WARNING_TYPE = Enum('WARNING_TYPE', 'WARNINGSAVE RESET ENCODE')
-    user_notification_msg = StringProperty('Note: In the text field below, displays default decoded message.')
-    reach_input_count_warning = StringProperty('Warning: Not encodable. Maximum encode character number has been reached.')
+    user_notification_msg = StringProperty('Note: Below displays the default decoded message.')
     warning_type, new_filepath, new_filename = '', '', ''
     encodable_bool = True
     # this is the object to be referenced by all other functions
@@ -83,6 +82,7 @@ class MainWidget(GridLayout):
 
     def on_open_button_click(self):
         """Call the method show_load_list() to open the file chooser dialog."""
+        # Set back the default message 
         self.display_image = ImageChooserPopup().show_load_list()
 
     def on_encode_button_click(self):
@@ -130,7 +130,6 @@ class MainWidget(GridLayout):
                 # and enable the text field.
                 App.get_running_app().reset_btn_disabled = True
                 App.get_running_app().textfield_disabled = False
-                self.ids.main_text_field.text = '' # Clear text field.
             if self.warning_type == self.WARNING_TYPE.ENCODE:
                 self.on_encode_button_click()
         else:
@@ -154,7 +153,7 @@ class MainWidget(GridLayout):
             self.encodable_bool = True
         elif((MainWidget.display_image.max_available_chars - len(self.ids.main_text_field.text) < 0)):
             self.user_notification_msg ='Warning: Not encodable. '\
-            'Maximum encode characters has exceeded by '\
+            '/nMaximum encode characters have exceeded by '\
             + str((len(self.ids.main_text_field.text) - MainWidget.display_image.max_available_chars))
             self.encodable_bool = False
 
@@ -230,7 +229,15 @@ class MainWidget(GridLayout):
             self.popup_user_notification('Please select a valid image file.', self.MESSAGE_TYPE.INFO)
 
     def execute_save(self):
+        """
+        Call external method save_image() to save the new encoded image.
+        Then display saved image to the main gui, call decode_image()
+        to display decoded message in the text field.
+        """
         MainWidget.display_image.save_image(self.new_filepath, self.new_filename)
+        App.get_running_app().title = 'Steganosaurus - ' + self.new_filename
+        self.ids.main_image.source = self.new_filepath + '/' + self.new_filename # Upload saved image
+        self.textfield_str = MainWidget.display_image.decode_image() # Decode saved image
 
 # global file_path to be shared between ImageSaverPopup and ImageChooserPopup for saving
 class ImageSaverPopup(Popup):
@@ -305,7 +312,6 @@ class ImageChooserPopup(Popup):
             # and enable the textfield.     
             App.get_running_app().reset_btn_disabled = True
             App.get_running_app().textfield_disabled = False
-
             # refresh window
             # print(MainWidget.display_image.filename)
             # dismiss popup
@@ -317,20 +323,24 @@ class ImageChooserPopup(Popup):
     def dismiss_popup(self):
         pass
 
-
 class MainFrame(App):
 
-    message = ''
-    message_type = ''
+    main_title, message, message_type = '', '', ''
     reset_btn_disabled = BooleanProperty(True)
     textfield_disabled = BooleanProperty(False)
     image_saver_dismiss = BooleanProperty(False)
+
+    # Display Main Gui title with image file name.
+    if "\\" in MainWidget.display_image.filename:
+        main_title = 'Steganosaurus - ' + str(((MainWidget.display_image.filename).split("\\"))[-1])
+    if "/" in MainWidget.display_image.filename:
+        main_title = 'Steganosaurus - ' + str(((MainWidget.display_image.filename).split("/"))[-1])
 
     # use this path to load logo images
     LOGO_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '../assets/stego.png'))
 
     def build(self):
-        self.title = 'Steganosaurus' # GUI title.
+        self.title = self.main_title # GUI title.
         return MainWidget()
 
 MainFrame().run()
