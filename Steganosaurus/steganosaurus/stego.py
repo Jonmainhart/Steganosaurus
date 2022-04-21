@@ -173,7 +173,7 @@ class MainWidget(GridLayout):
         except Exception:
             self.popup_user_notification('Please select a valid image file to save', MainWidget.MESSAGE_TYPE.INFO)
 
-# global file_path to be shared between ImageSaverPopup and ImageChooserPopup for saving
+
 class ImageSaverPopup(Popup):
     # local to hold current path directory where image can be saved
     save_dir: str = ''
@@ -205,21 +205,6 @@ class ImageSaverPopup(Popup):
             MainWidget.display_image.save_image(filepath, filename + '.png') # Pass filepath and file name.
             # dismiss popup after saving
             self.dismiss()
-
-            #Reset main GUI
-            # verify user wants to save 
-            # Zhihua can you explain the popups I had trouble implementing them correctly they are kind of confusing
-            # There will be 3 popups for saving:
-
-            # the first is a warning in case of overwriting yes no dialog
-
-            # the second is a warning just to double check if they really want to save, yes no dialog
-
-            # the third dialog will an info popup when the user tries to save in an unauthorized location. I'll add 
-            # the logic to that soon
-
-            # MainWidget.popup_user_notification(MainWidget(),'Image successfully Saved!', MainWidget.WARNING_TYPE.WARNINGSAVE)
-            # MainWidget.popup_user_notification(MainWidget(),'Image successfully Saved!', MainWidget.MESSAGE_TYPE.SAVED)
         # throw a "not an image" popup
         except Exception:
             MainWidget.popup_user_notification(MainWidget(),'Please select a valid image file.', MainWidget.MESSAGE_TYPE.INFO)
