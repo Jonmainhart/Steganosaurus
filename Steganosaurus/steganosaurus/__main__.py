@@ -16,7 +16,7 @@ Main file for Steganosaurus.
 Steganosaurus is an image-based steganography application written in Python.
 """
 
-from utils import open_image
+
 from models import ImageObject
 import stego
 
