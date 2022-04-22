@@ -40,6 +40,7 @@ class ImageObject:
         Private.
         Modifies the RGB values of the pixels of the ImageCore object by shifting 
         the value of each pixel to be either odd for a binary 1 or even for a binary 0.
+        Will truncate messages greater than max_available_chars
 
         Adapted from https://www.geeksforgeeks.org/image-based-steganography-using-python/
 
@@ -52,6 +53,12 @@ class ImageObject:
         """
         data_length = len(data)
         image_data = iter(pix)
+
+        # FIX ISSUE 9
+        # Truncate messages greater than max_available_chars
+        if data_length > self.max_available_chars:
+            data = data[:self.max_available_chars]
+            data_length = len(data)
 
         for i in range(data_length):
 
