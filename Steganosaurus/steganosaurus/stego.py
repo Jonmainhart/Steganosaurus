@@ -19,13 +19,12 @@ Config.set('graphics', 'resizable', False)
 
 import os, platform
 from kivy.app import App
-from kivy.uix.widget import Widget
+from kivy.cache import Cache
 from kivy.uix.gridlayout  import GridLayout
-from kivy.uix.floatlayout  import FloatLayout
 from kivy.lang import Builder
 from kivy.config import Config
 from kivy.factory import Factory
-from kivy.properties import StringProperty, BooleanProperty, NumericProperty, ObjectProperty
+from kivy.properties import StringProperty, BooleanProperty, NumericProperty
 from kivy.uix.popup import Popup
 from models import ImageObject
 from kivy.clock import Clock
@@ -256,6 +255,11 @@ class ImageSaverPopup(Popup):
             pass # TODO: Specify Exceptions
 
 class ImageChooserPopup(Popup):
+    def __init__(self, **kwargs):  #kivy constructor takes 2 arguments.	
+        super().__init__(**kwargs)	
+        # Remove cache, to reload the changed image files in the file chooser
+        Cache.remove('kv.image')	
+        Cache.remove('kv.texture')	
 
     file_path: str = ''
     def show_load_list(self):
@@ -289,6 +293,9 @@ class ImageChooserPopup(Popup):
             im.verify()
             # assign to display_image in main window
             MainWidget.display_image = ImageObject(filename=self.file_path)
+            # Update main GUI title with the new file name
+            App.get_running_app().title = 'Steganosaurus - ' \
+                + str(((MainWidget.display_image.filename).split(App.get_running_app().file_spliter))[-1])
             # After successfully uploades image, disable the reset button
             # and enable the textfield.     
             App.get_running_app().reset_btn_disabled = True
