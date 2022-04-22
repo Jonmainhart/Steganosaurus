@@ -153,7 +153,7 @@ class MainWidget(GridLayout):
             self.encodable_bool = True
         elif((MainWidget.display_image.max_available_chars - len(self.ids.main_text_field.text) < 0)):
             self.user_notification_msg ='Warning: Not encodable. '\
-            '/nMaximum encode characters have exceeded by '\
+            'Maximum encode characters have exceeded by '\
             + str((len(self.ids.main_text_field.text) - MainWidget.display_image.max_available_chars))
             self.encodable_bool = False
 
