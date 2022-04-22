@@ -17,7 +17,7 @@ from kivy.config import Config
 # Don't change the position of this code.
 Config.set('graphics', 'resizable', False)
 
-import os
+import os, platform
 from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.uix.gridlayout  import GridLayout
@@ -304,17 +304,18 @@ class ImageChooserPopup(Popup):
 
 class MainFrame(App):
 
-    main_title, message, message_type = '', '', ''
+    main_title, message, message_type, file_spliter = '', '', '', ''
     reset_btn_disabled = BooleanProperty(True)
     textfield_disabled = BooleanProperty(False)
     image_saver_dismiss = BooleanProperty(False)
-    
-    # Display Main Gui title with image file name.
-    if "\\" in MainWidget.display_image.filename:
-         main_title = 'Steganosaurus - ' + str(((MainWidget.display_image.filename).split("\\"))[-1])
-    if "/" in MainWidget.display_image.filename:
-         main_title = 'Steganosaurus - ' + str(((MainWidget.display_image.filename).split("/"))[-1])
 
+    if platform.system() == 'Darwin': # Mac os
+        file_spliter = "/"
+    else: # windows & linux
+        file_spliter = "\\"
+    # Display Main Gui title with image file name.
+    main_title = 'Steganosaurus - ' + str(((MainWidget.display_image.filename).split(file_spliter))[-1])
+    
     # use this path to load logo images
     LOGO_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '../assets/stego.png'))
 
