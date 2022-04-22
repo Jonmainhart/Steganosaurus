@@ -195,7 +195,8 @@
         FileChooserIconView:
             id: file_saver
             path: './'
-            on_selection: new_image_name.text = str(((self.selection[0]).split("/"))[-1]) if "/" in str(self.selection[0]) else str(((self.selection[0]).split("\\"))[-1]) # Get overwrite image name.
+            on_selection:  root.item_selected(self.selection)
+            # on_selection: new_image_name.text = str(((self.selection[0]).split("/"))[-1]) if "/" in str(self.selection[0]) else str(((self.selection[0]).split("\\"))[-1]) # Get overwrite image name.
         TextInput: # Allow user to enter a new image file name.
             id: new_image_name
             hint_text: "Enter a new image file name without extension. \nNew image will be saved as PNG format." # Place holder
