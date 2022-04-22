@@ -178,7 +178,6 @@ class MainWidget(GridLayout):
         App.get_running_app().image_saver_dismiss = False
         # check if GUI has image loaded
         try:
-            print("save button from main menu")
             # check if the image is loaded onto the screen
             # which means an image was chosen
             if not MainWidget.display_image is None:
@@ -194,7 +193,7 @@ class MainWidget(GridLayout):
         """On save button from the save filechooser, file saved to user's machine
         called by <ImageSaverPopup> in mainframe.kv line 213
         params: @new_filepath ->  FileChooserIconView.path in mainframe.kv line 197 which is assigned './' line 
-                @new_filename -> FileChooserIconView.onselection in mainframe.kv line 198 assigned to
+         INDEXERROR HAPPENING HERE -> @new_filename -> FileChooserIconView.onselection in mainframe.kv line 198 assigned to
                  textinput.id line new_image_name """
         try:
             self.new_filepath = new_filepath
@@ -246,6 +245,15 @@ class ImageSaverPopup(Popup):
     def dismiss_popup(self, *args):
         if App.get_running_app().image_saver_dismiss:
             self.dismiss()
+
+    def item_selected(self,filename):
+        """ called by ImageSaverPopup Widget in mainframe.kv line 198 """
+        try:
+            print("suhh\n")
+            print("Filename: " + filename[0])
+
+        except:
+            pass # TODO: Specify Exceptions
 
 class ImageChooserPopup(Popup):
 
