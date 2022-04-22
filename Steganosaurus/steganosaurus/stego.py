@@ -172,28 +172,30 @@ class MainWidget(GridLayout):
         # Popup overwriting warning dialog
         self.overwrite_bool = (self.popup_user_notification( \
         'Are you sure you want to encode the image?', self.MESSAGE_TYPE.WARNING))
-
+    
     def on_save_button_click(self):
-        """ check if GUI has image loaded"""
+        """When the save button is clicked from the main menu on GUI"""
         App.get_running_app().image_saver_dismiss = False
+        # check if GUI has image loaded
         try:
+            print("save button from main menu")
             # check if the image is loaded onto the screen
             # which means an image was chosen
             if not MainWidget.display_image is None:
-                print("*** MainWidget.on_save_button_click() data check ***\n")
-                print(f"Image loaded {MainWidget.display_image.filename}\n")
-                print(f"Image type {type(MainWidget.display_image.filename)}\n")
                 # get the file path
                 """Call the method show_load_list() to open the file chooser dialog."""
                 ImageSaverPopup().show_filechooser()
             else:
-                print("image not loaded\n")
                 raise Exception
         except Exception:
             self.popup_user_notification('Please select a valid image file to save', MainWidget.MESSAGE_TYPE.INFO)
 
     def save(self, new_filepath, new_filename):
-        """On save button, file saved here"""
+        """On save button from the save filechooser, file saved to user's machine
+        called by <ImageSaverPopup> in mainframe.kv line 213
+        params: @new_filepath ->  FileChooserIconView.path in mainframe.kv line 197 which is assigned './' line 
+                @new_filename -> FileChooserIconView.onselection in mainframe.kv line 198 assigned to
+                 textinput.id line new_image_name """
         try:
             self.new_filepath = new_filepath
             self.warning_type = self.WARNING_TYPE.WARNINGSAVE
@@ -211,20 +213,6 @@ class MainWidget(GridLayout):
                 self.overwrite_bool = (self.popup_user_notification( \
                 'Are you sure you want to save the image?', self.MESSAGE_TYPE.WARNING))
 
-            # verify user wants to save 
-            # Zhihua can you explain the popups I had trouble implementing them correctly they are kind of confusing
-            # There will be 3 popups for saving:
-
-            # the first is a warning in case of overwriting yes no dialog
-            # Done in line line.187-192  -Z.Z.H.
-            # the second is a warning just to double check if they really want to save, yes no dialog
-            # Done in line line.194-197  -Z.Z.H.
-            # the third dialog will an info popup when the user tries to save in an unauthorized location. I'll add 
-            # the logic to that soon
-
-            # MainWidget.popup_user_notification(MainWidget(),'Image successfully Saved!', MainWidget.WARNING_TYPE.WARNINGSAVE)
-            # MainWidget.popup_user_notification(MainWidget(),'Image successfully Saved!', MainWidget.MESSAGE_TYPE.SAVED)
-        # throw a "not an image" popup
         except Exception:
             self.popup_user_notification('Please select a valid image file.', self.MESSAGE_TYPE.INFO)
 
@@ -249,25 +237,10 @@ class ImageSaverPopup(Popup):
     # local to hold current path directory where image can be saved
     save_dir: str = ''
 
-    # I am pretty sure this method should be fired whenever the user clicks on a folder
-    def folder_clicked(self,path,filename):
-        """called by ImageChooserPopup Widget in mainframe.kv"""
-        try:
-            print("*** ImageSaverPopup.folder_clicked() data check ***\n")
-            with open(os.path.join(path, filename[0])) as stream:
-                self.text_input.text = stream.read()
-
-        except:
-            pass # TODO: Specify Exceptions
-
     def show_filechooser(self):
-        print("*** ImageSaverPopup.show_filechooser() data check ***\n")
-        print("Image Saver Popup opened\n")
-        print(f"File path string {MainWidget.display_image.filename}\n")
         im = Image.open(MainWidget.display_image.filename)
         # if it is an image, verify if the image is not corrupted
         im.verify()
-        print(f"Image {im}\n")
         self.open()
 
     def dismiss_popup(self, *args):
@@ -302,7 +275,6 @@ class ImageChooserPopup(Popup):
         # check whether this image is actually an image or not
         # when load button is pressed
         try:
-            print(f"File path string {self.file_path}\n")
             im = Image.open(self.file_path)
             # if it is an image, verify if the image is not corrupted
             im.verify()
@@ -312,8 +284,6 @@ class ImageChooserPopup(Popup):
             # and enable the textfield.     
             App.get_running_app().reset_btn_disabled = True
             App.get_running_app().textfield_disabled = False
-            # refresh window
-            # print(MainWidget.display_image.filename)
             # dismiss popup
             self.dismiss()
         # throw a "not an image" popup
