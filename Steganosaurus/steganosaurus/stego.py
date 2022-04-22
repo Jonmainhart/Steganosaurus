@@ -249,7 +249,7 @@ class ImageSaverPopup(Popup):
     def item_selected(self,filename):
         """ called by ImageSaverPopup Widget in mainframe.kv line 198 """
         try:
-            print("suhh\n")
+            print("Current image file to be saved: " + MainWidget.display_image.filename)
             print("Filename: " + filename[0])
 
         except:
@@ -278,8 +278,9 @@ class ImageChooserPopup(Popup):
         except:
             pass # TODO: Specify Exceptions
 
+    # update Mainframe main_title with new image string found in MainWidget.display_image.filename
     def load_list(self):
-        """On load button, file processed here"""
+        """On load button, file processed here """
         # check whether this image is actually an image or not
         # when load button is pressed
         try:
@@ -307,12 +308,12 @@ class MainFrame(App):
     reset_btn_disabled = BooleanProperty(True)
     textfield_disabled = BooleanProperty(False)
     image_saver_dismiss = BooleanProperty(False)
-
+    
     # Display Main Gui title with image file name.
     if "\\" in MainWidget.display_image.filename:
-        main_title = 'Steganosaurus - ' + str(((MainWidget.display_image.filename).split("\\"))[-1])
+         main_title = 'Steganosaurus - ' + str(((MainWidget.display_image.filename).split("\\"))[-1])
     if "/" in MainWidget.display_image.filename:
-        main_title = 'Steganosaurus - ' + str(((MainWidget.display_image.filename).split("/"))[-1])
+         main_title = 'Steganosaurus - ' + str(((MainWidget.display_image.filename).split("/"))[-1])
 
     # use this path to load logo images
     LOGO_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '../assets/stego.png'))
