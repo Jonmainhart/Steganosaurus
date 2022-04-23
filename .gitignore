@@ -46,5 +46,7 @@ Thumbs.db
 Steganosaurus/steganosaurus/__pycache__/__main__.cpython-39.pyc
 Steganosaurus/steganosaurus/__pycache__/models.cpython-39.pyc
 Steganosaurus/steganosaurus/__pycache__/utils.cpython-39.pyc
-!**/__pycache__/
 Steganosaurus/steganosaurus/__pycache__/stego.cpython-39.pyc
+Steganosaurus/steganosaurus/tests/__pycache__/__init__.cpython-39.pyc
+Steganosaurus/steganosaurus/tests/__pycache__/test.cpython-39-pytest-7.1.1.pyc
+**/__pycache__/
