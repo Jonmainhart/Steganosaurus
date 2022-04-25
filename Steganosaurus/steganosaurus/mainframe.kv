@@ -211,4 +211,5 @@
                 on_release: root.dismiss()
             Button:
                 text: "Save"
-                on_press: app.root.save(file_saver.path, new_image_name.text) # After clicking save button, go to save() in MainWidget line 193
+                on_press: app.root.validate_image_name(new_image_name.text, file_saver.path, new_image_name.text)
+                #on_release: app.root.save(file_saver.path, new_image_name.text) # After clicking save button, go to save() in MainWidget line 193
