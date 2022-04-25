@@ -64,7 +64,7 @@
                 width: "110dp"
                 height: "40dp"
                 text: "Save Image"
-                on_release: root.on_save_button_click() # TODO root is MainWidget
+                on_release: root.on_save_button_click()
             RoundedCornerButton:
                 id: reset_btn
                 text_size: self.width, None
@@ -97,7 +97,6 @@
         hint_text: "Enter scecret message here" # Place holder
         multiline: True
         disabled: app.textfield_disabled
-        on_text_validate: root.on_text_validate() 
 
     AnchorLayout: 
         anchor_x: 'right'
@@ -171,7 +170,7 @@
         FileChooserIconView:
             id: file_chooser
             path: './'
-            on_selection: root.selected(file_chooser.selection) # when a file, not folder/directory is clicked
+            on_selection: root.selected(file_chooser.selection) if len(self.selection) > 0 else ''
         BoxLayout:
             size_hint_y: None
             height: 50
@@ -180,8 +179,6 @@
                 on_release: root.dismiss()
             Button:
                 text: "Load"
-                # TODO: Need to add load file code.
-                # goes to stego.load_list()
                 on_press: app.root.update_textfield_input() # After loading image, decode image then display msg
                 on_release: root.load_list() # root is ImageChooserPopup
 
@@ -195,7 +192,6 @@
         FileChooserIconView:
             id: file_saver
             path: './'
-            #on_selection:  root.item_selected(self.selection)
             on_selection: new_image_name.text = str(((self.selection[0]).split(app.file_spliter))[-1]) if len(self.selection) > 0 else ''
         TextInput: # Allow user to enter a new image file name.
             id: new_image_name
@@ -211,5 +207,4 @@
                 on_release: root.dismiss()
             Button:
                 text: "Save"
-                on_press: app.root.validate_image_name(new_image_name.text, file_saver.path, new_image_name.text)
-                #on_release: app.root.save(file_saver.path, new_image_name.text) # After clicking save button, go to save() in MainWidget line 193
+                on_release: app.root.save(file_saver.path, new_image_name.text)
