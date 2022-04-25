@@ -48,15 +48,136 @@ class MainWidget(GridLayout):
     
     # Use enum to define different message types.
     MESSAGE_TYPE = Enum('MESSAGE_TYPE', 'INFO ERROR WARNING')
-    WARNING_TYPE = Enum('WARNING_TYPE', 'WARNINGSAVE RESET ENCODE')
-    user_notification_msg = StringProperty('Note: Below displays the default decoded message.')
-    warning_type, new_filepath, new_filename = '', '', ''
-    encodable_bool = True
+    WARNING_TYPE = Enum('WARNING_TYPE', 'WARNINGSAVE RESET')
     # this is the object to be referenced by all other functions
     # initialize with the default constructor
     display_image = ImageObject()
+    # Define local variables with default values.
+    user_notification_msg = StringProperty('Note: Below displays the default decoded message.')
+    warning_type, new_filepath, new_filename = '', '', ''
+    encodable_bool = True
     maximum_char_count = NumericProperty(display_image.max_available_chars)
     textfield_str = StringProperty(display_image.decode_image())
+
+    def on_open_button_click(self):
+        """Call the method show_load_list() to open the file chooser dialog."""
+        self.display_image = ImageChooserPopup().show_load_list()
+
+    def on_encode_button_click(self):
+        """
+        Call the method encode_image() and enable the reset button,
+        if the varaible encodable_bool is true;
+        otherwise, popup warning message.
+        """
+        if (self.encodable_bool):
+            # Passing the text field input to ecode method.
+            MainWidget.display_image.encode_image(self.ids.main_text_field.text)
+            # Enable reset button, disable the textfield modification.
+            self.update_widgets_status(False, True, False)
+        else:
+            self.popup_user_notification('Failed to execute encode function!\
+            \nPlease modify the text field input.', MainWidget.MESSAGE_TYPE.ERROR)
+
+    def on_reset_button_click(self):
+        """Popup reset warning dialog."""
+        # Set reset button warning popup values.
+        self.warning_type = self.WARNING_TYPE.RESET
+        self.popup_user_notification( \
+            'Are you sure you want to reset the image?', self.MESSAGE_TYPE.WARNING)
+
+    def execute_reset(self):
+        """Call the method reset_image()"""    
+        MainWidget.display_image.reset_image()
+
+    def on_save_button_click(self):
+        """
+        If the selected image is valid, call the method show_load_list() 
+        to open the file saver dialog; otherwise, display error popup.
+        """
+        # Reset image saver popup dismiss status.
+        App.get_running_app().image_saver_dismiss = False
+
+        # check if the image is loaded onto the screen
+        # which means an image was chosen
+        if not MainWidget.display_image is None:
+            if not self.new_filename: # Validate if new file name exists.
+                # Assign current image file name.
+                self.new_filename = App.get_running_app().current_filename
+            ImageSaverPopup().show_filechooser()
+        else:
+            self.popup_user_notification('Please select a valid image file to save.'\
+                , MainWidget.MESSAGE_TYPE.INFO)
+
+    def save(self, new_filepath, new_filename):
+        """
+        If the new image name is valid, popup warning dialogs.
+        Otherwise, do nothing.
+        
+        Args:
+            new_filepath: String
+            new_filename: String
+        """  
+        if (self.validate_image_name(new_filename)): # Validate the new input file name.
+            try:
+                self.new_filepath = new_filepath
+                self.warning_type = self.WARNING_TYPE.WARNINGSAVE
+                # Validate the extension of the file, if none exist, set default extension as PNG.
+                if not ('.png' in new_filename.lower() or '.jpeg' in new_filename.lower()\
+                    or '.jpg' in new_filename.lower()):
+                    new_filename += '.png'
+                
+                self.new_filename = new_filename # Assign file name.
+
+                # Validate if the user trying to overwrite image.
+                if ((Path.cwd() / new_filepath / new_filename).exists()):
+                    # Popup overwriting warning dialog
+                    self.overwrite_bool = (self.popup_user_notification( 'Image name already exists.'\
+                    '\nAre you sure you want to overwrite the image?', self.MESSAGE_TYPE.WARNING))
+                else:
+                    # Popup warning dialog, if proceed saving image or not.
+                    self.overwrite_bool = (self.popup_user_notification( \
+                    'Are you sure you want to save the image?', self.MESSAGE_TYPE.WARNING))
+
+            except Exception:
+                self.popup_user_notification('Please select a valid image file.', self.MESSAGE_TYPE.INFO)
+
+    def execute_save(self):
+        """
+        Call external method save_image() to save the new encoded image.
+        Then display saved image to the main gui, call decode_image()
+        to display decoded message in the text field.
+        """
+        try:
+            MainWidget.display_image.save_image(self.new_filepath, self.new_filename)
+            App.get_running_app().title = 'Steganosaurus - ' + self.new_filename
+            self.ids.main_image.source = self.new_filepath + '/' + self.new_filename # Upload saved image
+            self.textfield_str = MainWidget.display_image.decode_image() # Decode saved image
+
+        except PermissionError:
+            MainWidget.popup_user_notification(MainWidget(),'Permission denied to access the file.',\
+                MainWidget.MESSAGE_TYPE.ERROR)
+
+        except Exception:
+            MainWidget.popup_user_notification(MainWidget(),'Fail to save the file.',
+                MainWidget.MESSAGE_TYPE.ERROR)
+
+    def validate_image_name(self, image_name):
+        """
+        Validate the new image name, that the user entered in the textfield.
+        File name only allows alphanumeric characters, underscore and hyphens.
+        Underscore and hyphens are not allowed to be placed at the first or last position.
+        Dot(.) in the middle of the image name is allowed to accept overwriting the existing image.
+        
+        Args:
+            image_name: String
+        """
+        pattern = re.compile('^[A-Za-z0-9]+[\w\-.]+[^-_.]$')
+        if pattern.match(image_name) is None:
+            self.popup_user_notification("Invalid file name!\
+            \nOnly alphabet characters, numbers, dot, underscore and hyphens are allowed. (e.g. image_1)\
+            ", MainWidget.MESSAGE_TYPE.ERROR)
+            return False
+        return True
 
     def popup_user_notification(self, message, message_type):
         """
@@ -79,61 +200,44 @@ class MainWidget(GridLayout):
             App.get_running_app().message_type = 'Error'
             Factory.InfoAndErrorPopup().open()
 
-    def on_open_button_click(self):
-        """Call the method show_load_list() to open the file chooser dialog."""
-        # Set back the default message 
-        self.display_image = ImageChooserPopup().show_load_list()
-
-    def on_encode_button_click(self):
-        """Call the method encode_image() and enable the reset button."""
-        if (self.encodable_bool):
-            # Passing text field input to ecode method.
-            MainWidget.display_image.encode_image(self.ids.main_text_field.text)
-            # Only enable reset button, after successfully encoding the image.
-            App.get_running_app().reset_btn_disabled = False
-            # After finidhing encoding, disable the textfield modification.
-            App.get_running_app().textfield_disabled = True
-        else:
-            self.popup_user_notification('Failed to execute encode function!\
-            \nPlease modify the text field input.', MainWidget.MESSAGE_TYPE.ERROR)
-
-    def on_reset_button_click(self):
-        """Popup warning dialog."""
-        # Set reset button warning popup values.
-        self.warning_type = self.WARNING_TYPE.RESET
-        self.popup_user_notification( \
-            'Are you sure you want to reset the image?', self.MESSAGE_TYPE.WARNING)
-
-    def execute_reset(self):
-        """Call the method reset_image()"""    
-        MainWidget.display_image.reset_image()
-
     def update_warning_btn_yes(self, warning_btn_yes):
         """
         If the user click "yes" on the warning dialog,
         disable the reset button and call the method execute_reset/execute_save;
         otherwise, do nothing.
         The method is called from dialog.kv file.
+
+        Args:
+            warning_btn_yes: boolean
         """
         if warning_btn_yes:
-            if self.warning_type == self.WARNING_TYPE.RESET:
+            if self.warning_type == self.WARNING_TYPE.RESET: # Reset image popup.
                 self.update_textfield_input() # Reset the textfield.
                 self.execute_reset()
-                App.get_running_app().reset_btn_disabled = True
-                App.get_running_app().textfield_disabled = False
+                # Enable reset button and enable the text field.
+                self.update_widgets_status(True, False, False)
 
-            if self.warning_type == self.WARNING_TYPE.WARNINGSAVE: # TODO: Save image popup
+            if self.warning_type == self.WARNING_TYPE.WARNINGSAVE: # Save image popup.
                 self.execute_save()
-                App.get_running_app().image_saver_dismiss = True
-                # After successfully saving the image, disable reset button
-                # and enable the text field.
-                App.get_running_app().reset_btn_disabled = True
-                App.get_running_app().textfield_disabled = False
-            if self.warning_type == self.WARNING_TYPE.ENCODE:
-                self.on_encode_button_click()
+                # Enable reset button, enable the text field and dismiss saver popup.
+                self.update_widgets_status(True, False, True)
         else:
             if self.warning_type == self.WARNING_TYPE.RESET:
-                App.get_running_app().reset_btn_disabled = False
+                # Enable reset button and enable the text field.
+                self.update_widgets_status(False, True, False)
+
+    def update_widgets_status(self, reset_btn_disabled, textfield_disabled, image_saver_dismiss):
+        """
+        Set Main GUI widgets' status enable/disabled.
+        
+        Args:
+            reset_btn_disabled: boolean
+            textfield_disabled: boolean
+            image_saver_dismiss: boolean
+        """
+        App.get_running_app().reset_btn_disabled = reset_btn_disabled
+        App.get_running_app().textfield_disabled = textfield_disabled
+        App.get_running_app().image_saver_dismiss = image_saver_dismiss
 
     def update_main_widgets(self, *args):
         """
@@ -163,121 +267,23 @@ class MainWidget(GridLayout):
         """
         self.ids.main_text_field.text = self.textfield_str
 
-    def on_text_validate(self):
-        """
-        Display encode warning dialog, when user presses enter in the textfield.
-        """
-        self.warning_type = self.WARNING_TYPE.ENCODE
-        # Popup overwriting warning dialog
-        self.overwrite_bool = (self.popup_user_notification( \
-        'Are you sure you want to encode the image?', self.MESSAGE_TYPE.WARNING))
-    
-    def on_save_button_click(self):
-        """When the save button is clicked from the main menu on GUI"""
-        App.get_running_app().image_saver_dismiss = False
-        # check if GUI has image loaded
-        try:
-            # check if the image is loaded onto the screen
-            # which means an image was chosen
-            if not MainWidget.display_image is None:
-                # get the file path
-                """Call the method show_load_list() to open the file chooser dialog."""
-                ImageSaverPopup().show_filechooser()
-            else:
-                raise Exception
-        except Exception:
-            self.popup_user_notification('Please select a valid image file to save', MainWidget.MESSAGE_TYPE.INFO)
-
-    def save(self, new_filepath, new_filename):
-        """On save button from the save filechooser, file saved to user's machine
-        called by <ImageSaverPopup> in mainframe.kv line 213
-        params: @new_filepath ->  FileChooserIconView.path in mainframe.kv line 197 which is assigned './' line 
-         INDEXERROR HAPPENING HERE -> @new_filename -> FileChooserIconView.onselection in mainframe.kv line 198 assigned to
-                 textinput.id line new_image_name """
-        try:
-            self.new_filepath = new_filepath
-            self.warning_type = self.WARNING_TYPE.WARNINGSAVE
-            if not ('.png' in new_filename.lower() or '.jpeg' in new_filename.lower() or '.jpg' in new_filename.lower()):
-                new_filename += '.png'
-            # Validate if the user trying to overwrite image.
-            if ((Path.cwd() / new_filepath / new_filename).exists()):
-                self.new_filename = new_filename.replace("overwriting: ", '')
-                # Popup overwriting warning dialog
-                self.overwrite_bool = (self.popup_user_notification( 'Image name already exists.\n'\
-                'Are you sure you want to overwrite the image?', self.MESSAGE_TYPE.WARNING))
-            else:
-                self.new_filename = new_filename
-                # Popup warning dialog, if proceed saving image or not.
-                self.overwrite_bool = (self.popup_user_notification( \
-                'Are you sure you want to save the image?', self.MESSAGE_TYPE.WARNING))
-
-        except Exception:
-            self.popup_user_notification('Please select a valid image file.', self.MESSAGE_TYPE.INFO)
-
-    def execute_save(self):
-        """
-        Call external method save_image() to save the new encoded image.
-        Then display saved image to the main gui, call decode_image()
-        to display decoded message in the text field.
-        """
-        try:
-            MainWidget.display_image.save_image(self.new_filepath, self.new_filename)
-            App.get_running_app().title = 'Steganosaurus - ' + self.new_filename
-            self.ids.main_image.source = self.new_filepath + '/' + self.new_filename # Upload saved image
-            self.textfield_str = MainWidget.display_image.decode_image() # Decode saved image
-        except PermissionError:
-            MainWidget.popup_user_notification(MainWidget(),'Permission denied to access the file.',\
-                MainWidget.MESSAGE_TYPE.ERROR)
-        except (IOError, Exception):
-            MainWidget.popup_user_notification(MainWidget(),'Fail to save the file.',
-                MainWidget.MESSAGE_TYPE.ERROR)
-
-    def validate_image_name(self, image_name, filepath, filename ):
-        """
-        Validate the new image name, that the user entered in the textfield.
-        File name only allows alphanumeric characters, underscore and hyphens.
-        Underscore and hyphens are not allowed to be placed at the first or last position.
-        Dot(.) in the middle of the image name is allowed to accept overwriting the existing image. 
-        """
-        pattern = re.compile('^[A-Za-z0-9]+[\w\-.]+[^-_.]$')
-        if pattern.match(image_name) is None:
-            self.popup_user_notification("Invalid file name!\
-            \nOnly alphabet characters, numbers, dot, underscore and hyphens are allowed. (e.g. image_1)\
-            ", MainWidget.MESSAGE_TYPE.ERROR)
-        else:
-            self.save(filepath,filename)
-
-# global file_path to be shared between ImageSaverPopup and ImageChooserPopup for saving
 class ImageSaverPopup(Popup):
-    def __init__(self, **kwargs):  #kivy constructor takes 2 arguments.
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
         # Schedule the function call to close the saver popup.
         Clock.schedule_interval(self.dismiss_popup, .1) 
 
-    # local to hold current path directory where image can be saved
-    save_dir: str = ''
-
     def show_filechooser(self):
-        im = Image.open(MainWidget.display_image.filename)
-        # if it is an image, verify if the image is not corrupted
-        im.verify()
+        """Open file saver popup view."""
         self.open()
 
     def dismiss_popup(self, *args):
+        """If the variable image_saver_dismiss is true, close popup."""
         if App.get_running_app().image_saver_dismiss:
             self.dismiss()
 
-    def item_selected(self,filename):
-        """ called by ImageSaverPopup Widget in mainframe.kv line 198 """
-        try:
-            print("Current image file to be saved: " + MainWidget.display_image.filename)
-            print("Filename: " + filename[0])
-
-        except:
-            pass # TODO: Specify Exceptions
-
 class ImageChooserPopup(Popup):
-    def __init__(self, **kwargs):  #kivy constructor takes 2 arguments.	
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)	
         # Remove cache, to reload the changed image files in the file chooser
         Cache.remove('kv.image')	
@@ -285,26 +291,32 @@ class ImageChooserPopup(Popup):
 
     file_path: str = ''
     def show_load_list(self):
-        Factory.ImageChooserPopup().open()
+        """Open file chooser popup view."""
+        self.open()
 
     def selected(self,filename):
         """called by ImageChooserPopup Widget in mainframe.kv"""
-        try:
-            # setting this item to a list, the 0th item in the list
-            # which is the filename full path
-            # from mainframe.kv file
-            # Image:
-            #   id: file_image
-            #   source: ""
-            # NOTE: set on file click, not load button click
-            self.ids.file_image.source = filename[0]
-            # assign to local
-            self.file_path = os.path.abspath(filename[0])
+        if len(filename) > 0:
+            try:
+                # setting this item to a list, the 0th item in the list
+                # which is the filename full path
+                # from mainframe.kv file
+                # Image:
+                #   id: file_image
+                #   source: ""
+                # NOTE: set on file click, not load button click
+                self.ids.file_image.source = filename[0]
+                # assign to local
+                self.file_path = os.path.abspath(filename[0])
 
-        except:
-            pass # TODO: Specify Exceptions
+            except PermissionError:
+                MainWidget.popup_user_notification(MainWidget(),'Permission denied to access the file.',\
+                    MainWidget.MESSAGE_TYPE.ERROR)
 
-    # update Mainframe main_title with new image string found in MainWidget.display_image.filename
+            except Exception: # throw a "not an image" popup
+                MainWidget.popup_user_notification(MainWidget(),'Please select a valid image file.',\
+                    MainWidget.MESSAGE_TYPE.ERROR)
+
     def load_list(self):
         """On load button, file processed here """
         # check whether this image is actually an image or not
@@ -315,45 +327,46 @@ class ImageChooserPopup(Popup):
             im.verify()
             # assign to display_image in main window
             MainWidget.display_image = ImageObject(filename=self.file_path)
+            
             # Update main GUI title with the new file name
-            App.get_running_app().title = 'Steganosaurus - ' \
-                + str(((MainWidget.display_image.filename).split(App.get_running_app().file_spliter))[-1])
-            # After successfully uploades image, disable the reset button
-            # and enable the textfield.     
+            App.get_running_app().current_image = \
+                str(((MainWidget.display_image.filename).split(App.get_running_app().file_spliter))[-1])
+            App.get_running_app().title = 'Steganosaurus - '+ App.get_running_app().current_image
+            
+            # Disable the reset button band enable the textfield.
             App.get_running_app().reset_btn_disabled = True
             App.get_running_app().textfield_disabled = False
+
             # dismiss popup
             self.dismiss()
+
         except PermissionError:
             MainWidget.popup_user_notification(MainWidget(),'Permission denied to access the file.',\
                 MainWidget.MESSAGE_TYPE.ERROR)
-        except IOError:
-            MainWidget.popup_user_notification(MainWidget(),'Fail to load the file.',
-                MainWidget.MESSAGE_TYPE.ERROR)
+                
         except Exception: # throw a "not an image" popup
             MainWidget.popup_user_notification(MainWidget(),'Please select a valid image file.',\
                 MainWidget.MESSAGE_TYPE.ERROR)
 
-    def dismiss_popup(self):
-        pass
-
 class MainFrame(App):
 
-    main_title, message, message_type, file_spliter = '', '', '', ''
+    main_title, message, message_type, file_spliter, current_filename = '', '', '', '', ''
     reset_btn_disabled = BooleanProperty(True)
     textfield_disabled = BooleanProperty(False)
     image_saver_dismiss = BooleanProperty(False)
     valid_image_name = BooleanProperty(True)
 
-    if platform.system() == 'Darwin': # Mac os
-        file_spliter = "/"
-    else: # windows & linux
+    if platform.system() == 'Windows': # Windows
         file_spliter = "\\"
-    # Display Main Gui title with image file name.
-    main_title = 'Steganosaurus - ' + str(((MainWidget.display_image.filename).split(file_spliter))[-1])
-    # Windows dafault title, if the "\\" and "/" are mixed in the file path.
-    if "/" in main_title:
-        main_title = 'Steganosaurus - ' + str(((MainWidget.display_image.filename).split("/" ))[-1])
+        # Windows dafault title, if the "\\" and "/" are mixed in the file path.
+        if "/" in main_title:
+            current_filename = str(((MainWidget.display_image.filename).split("/" ))[-1])
+    else: # Mac os & linux
+        file_spliter = "/"
+        current_filename = str(((MainWidget.display_image.filename).split(file_spliter))[-1])
+
+    # Assign Main GUI title with image file name.
+    main_title = 'Steganosaurus - ' + current_filename 
     # use this path to load logo images
     LOGO_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '../assets/stego.png'))
 
