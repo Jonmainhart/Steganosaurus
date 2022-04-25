@@ -17,7 +17,7 @@ from kivy.config import Config
 # Don't change the position of this code.
 Config.set('graphics', 'resizable', False)
 
-import os, platform
+import os, platform, re
 from kivy.app import App
 from kivy.cache import Cache
 from kivy.uix.gridlayout  import GridLayout
@@ -220,10 +220,32 @@ class MainWidget(GridLayout):
         Then display saved image to the main gui, call decode_image()
         to display decoded message in the text field.
         """
-        MainWidget.display_image.save_image(self.new_filepath, self.new_filename)
-        App.get_running_app().title = 'Steganosaurus - ' + self.new_filename
-        self.ids.main_image.source = self.new_filepath + '/' + self.new_filename # Upload saved image
-        self.textfield_str = MainWidget.display_image.decode_image() # Decode saved image
+        try:
+            MainWidget.display_image.save_image(self.new_filepath, self.new_filename)
+            App.get_running_app().title = 'Steganosaurus - ' + self.new_filename
+            self.ids.main_image.source = self.new_filepath + '/' + self.new_filename # Upload saved image
+            self.textfield_str = MainWidget.display_image.decode_image() # Decode saved image
+        except PermissionError:
+            MainWidget.popup_user_notification(MainWidget(),'Permission denied to access the file.',\
+                MainWidget.MESSAGE_TYPE.ERROR)
+        except (IOError, Exception):
+            MainWidget.popup_user_notification(MainWidget(),'Fail to save the file.',
+                MainWidget.MESSAGE_TYPE.ERROR)
+
+    def validate_image_name(self, image_name, filepath, filename ):
+        """
+        Validate the new image name, that the user entered in the textfield.
+        File name only allows alphanumeric characters, underscore and hyphens.
+        Underscore and hyphens are not allowed to be placed at the first or last position.
+        Dot(.) in the middle of the image name is allowed to accept overwriting the existing image. 
+        """
+        pattern = re.compile('^[A-Za-z0-9]+[\w\-.]+[^-_.]$')
+        if pattern.match(image_name) is None:
+            self.popup_user_notification("Invalid file name!\
+            \nOnly alphabet characters, numbers, dot, underscore and hyphens are allowed. (e.g. image_1)\
+            ", MainWidget.MESSAGE_TYPE.ERROR)
+        else:
+            self.save(filepath,filename)
 
 # global file_path to be shared between ImageSaverPopup and ImageChooserPopup for saving
 class ImageSaverPopup(Popup):
@@ -302,9 +324,15 @@ class ImageChooserPopup(Popup):
             App.get_running_app().textfield_disabled = False
             # dismiss popup
             self.dismiss()
-        # throw a "not an image" popup
-        except Exception:
-            MainWidget.popup_user_notification(MainWidget(),'Please select a valid image file.', MainWidget.MESSAGE_TYPE.INFO)
+        except PermissionError:
+            MainWidget.popup_user_notification(MainWidget(),'Permission denied to access the file.',\
+                MainWidget.MESSAGE_TYPE.ERROR)
+        except IOError:
+            MainWidget.popup_user_notification(MainWidget(),'Fail to load the file.',
+                MainWidget.MESSAGE_TYPE.ERROR)
+        except Exception: # throw a "not an image" popup
+            MainWidget.popup_user_notification(MainWidget(),'Please select a valid image file.',\
+                MainWidget.MESSAGE_TYPE.ERROR)
 
     def dismiss_popup(self):
         pass
@@ -315,6 +343,7 @@ class MainFrame(App):
     reset_btn_disabled = BooleanProperty(True)
     textfield_disabled = BooleanProperty(False)
     image_saver_dismiss = BooleanProperty(False)
+    valid_image_name = BooleanProperty(True)
 
     if platform.system() == 'Darwin': # Mac os
         file_spliter = "/"
@@ -322,7 +351,9 @@ class MainFrame(App):
         file_spliter = "\\"
     # Display Main Gui title with image file name.
     main_title = 'Steganosaurus - ' + str(((MainWidget.display_image.filename).split(file_spliter))[-1])
-    
+    # Windows dafault title, if the "\\" and "/" are mixed in the file path.
+    if "/" in main_title:
+        main_title = 'Steganosaurus - ' + str(((MainWidget.display_image.filename).split("/" ))[-1])
     # use this path to load logo images
     LOGO_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '../assets/stego.png'))
 
