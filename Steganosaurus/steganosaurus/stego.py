@@ -358,9 +358,10 @@ class MainFrame(App):
 
     if platform.system() == 'Windows': # Windows
         file_spliter = "\\"
+        current_filename = str(((MainWidget.display_image.filename).split(file_spliter))[-1])
         # Windows dafault title, if the "\\" and "/" are mixed in the file path.
-        if "/" in main_title:
-            current_filename = str(((MainWidget.display_image.filename).split("/" ))[-1])
+        if "/" in current_filename:
+            current_filename = str(((MainWidget.display_image.filename).split("/"))[-1])
     else: # Mac os & linux
         file_spliter = "/"
         current_filename = str(((MainWidget.display_image.filename).split(file_spliter))[-1])
