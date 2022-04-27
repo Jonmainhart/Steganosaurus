@@ -376,6 +376,3 @@ class MainFrame(App):
     def build(self):
         self.title = self.main_title # GUI title.
         return MainWidget()
-
-if __name__ == '__main__': 
-    MainFrame().run()

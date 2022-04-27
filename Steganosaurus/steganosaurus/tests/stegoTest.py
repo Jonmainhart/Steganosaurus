@@ -244,7 +244,7 @@ class TestStego(unittest.TestCase):
         '''
         update_warning_btn_yes method test.
         condition: warning_btn_yes = True
-                   self.warning_type == self.WARNING_TYPE.RESET is True
+        self.warning_type == self.WARNING_TYPE.RESET is True
         '''
         Clock.schedule_interval(self.pause, 0.000001)
         # Setup.
@@ -266,7 +266,7 @@ class TestStego(unittest.TestCase):
         '''
         update_warning_btn_yes method test.
         condition: warning_btn_yes = True
-                   self.warning_type == self.WARNING_TYPE.WARNINGSAVE is True
+        self.warning_type == self.WARNING_TYPE.WARNINGSAVE is True
         '''
         Clock.schedule_interval(self.pause, 0.000001)
         # Setup.
@@ -286,7 +286,7 @@ class TestStego(unittest.TestCase):
         '''
         update_warning_btn_yes method test.
         condition: warning_btn_yes = False
-                   self.warning_type == self.WARNING_TYPE.RESET is True is True
+        self.warning_type == self.WARNING_TYPE.RESET is True is True
         '''
         Clock.schedule_interval(self.pause, 0.000001)
         # Setup.
@@ -304,8 +304,8 @@ class TestStego(unittest.TestCase):
         '''
         update_widgets_status method test.
         condition: reset_btn_disabled = False
-                   textfield_disabled = True
-                   image_saver_dismiss = True
+        textfield_disabled = True
+        image_saver_dismiss = True
         '''
         Clock.schedule_interval(self.pause, 0.000001)
         # Execute.
@@ -518,6 +518,3 @@ class TestStego(unittest.TestCase):
         p = partial(self.run_test_update_textfield_input, app)
         Clock.schedule_once(p, 0.000001)
         app.run()
-
-if __name__ == '__main__':
-    unittest.main()

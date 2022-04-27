@@ -24,7 +24,7 @@ import stego
 
 def main():
     # open the GUI, after closing, rest of code below will execute, then gui window will close
-    stego.MainFrame()
+    stego.MainFrame().run()
     
 
 if __name__ == "__main__":
