@@ -173,7 +173,7 @@ class MainWidget(GridLayout):
         Args:
             image_name: String
         """
-        pattern = re.compile(r'^[A-Za-z0-9]+[\w\-.]+[^-_.]$')
+        pattern = re.compile(r'^[A-Za-z0-9]+[\w\-.]+[^-_.\s]$') # No space in the end of file name.
         if pattern.match(image_name) is None:
             self.popup_user_notification("Invalid file name!\
             \nOnly alphabet characters, numbers, dot, underscore and hyphens are allowed. (e.g. image_1)\
