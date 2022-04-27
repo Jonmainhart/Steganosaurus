@@ -146,18 +146,3 @@ class TestUtilities:
         
         # assert they are the same
         assert bin_list == test_list
-
-class TestFileIO:
-
-    def test_file_input_exception(self):
-        """
-        design this to test to check that non-image files throw an exception
-        and image files do not throw an exception
-        """
-        pass
-
-    def test_file_output_exception(self):
-        """
-        design this to check exceptions thrown from save()
-        """
-        pass
