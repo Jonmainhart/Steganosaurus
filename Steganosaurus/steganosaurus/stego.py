@@ -134,9 +134,11 @@ class MainWidget(GridLayout):
                     self.overwrite_bool = (self.popup_user_notification( 'Image name already exists.'\
                     '\nAre you sure you want to overwrite the image?', self.MESSAGE_TYPE.WARNING))
                 else:
-                    # Popup warning dialog, if proceed saving image or not.
+                    self.warning_type == self.WARNING_TYPE.WARNINGSAVE
+                    self.update_warning_btn_yes(True) # Save new image with the new file name
+                    # Popup dialog, to notify user successfully saved file.
                     self.overwrite_bool = (self.popup_user_notification( \
-                    'Are you sure you want to save the image?', self.MESSAGE_TYPE.WARNING))
+                    'The new image has been successfully saved!', self.MESSAGE_TYPE.INFO))
 
             except Exception:
                 self.popup_user_notification('Please select a valid image file.', self.MESSAGE_TYPE.INFO)
