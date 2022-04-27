@@ -172,14 +172,17 @@ class TestStego(unittest.TestCase):
         Clock.schedule_interval(self.pause, 0.000001)
         # Setup.
         app.root.validate_image_name = MagicMock(return_value=True)
+        app.root.update_warning_btn_yes = MagicMock()
+        app.root.popup_user_notification = MagicMock()
         new_filename = 'test_no_image.png'
         new_filepath = main_path +  '/tests/'
-        app.root.popup_user_notification = MagicMock()
         # Execute.
         app.root.save(new_filepath, new_filename)
         # Validate.
+        self.assertEqual(app.root.WARNING_TYPE.WARNINGSAVE, app.root.warning_type)
+        app.root.update_warning_btn_yes.assert_called_once_with(True)
         app.root.popup_user_notification.assert_called_once_with(\
-            'Are you sure you want to save the image?', app.root.MESSAGE_TYPE.WARNING)
+            'The new image has been successfully saved!', app.root.MESSAGE_TYPE.INFO)
         app.stop()
         Window.close()
 
