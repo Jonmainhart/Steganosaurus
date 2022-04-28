@@ -22,7 +22,6 @@ from functools import partial
 from kivy.clock import Clock
 from unittest.mock import MagicMock, patch
 from pathlib import Path
-from kivy.core.window import Window
 
 main_path = op.dirname(op.dirname(op.abspath(__file__)))
 sys.path.append(main_path)
@@ -49,7 +48,6 @@ class TestStego(unittest.TestCase):
         self.assertEqual(app.root.display_image, result)
         # End app.
         app.stop()
-        Window.close()
 
     def run_test_on_encode_button_click_true(self, app, *args):
         '''
@@ -68,7 +66,6 @@ class TestStego(unittest.TestCase):
         app.root.update_widgets_status.assert_called_once_with(False, True, False)
         # End app.
         app.stop()
-        Window.close()
 
     def run_test_on_encode_button_click_false(self, app, *args):
         '''
@@ -86,7 +83,6 @@ class TestStego(unittest.TestCase):
             \nPlease modify the text field input.', app.root.MESSAGE_TYPE.ERROR)
         # End app.
         app.stop()
-        Window.close()
 
     def run_test_on_reset_button_click(self, app, *args):
         '''
@@ -104,7 +100,6 @@ class TestStego(unittest.TestCase):
             'Are you sure you want to reset the image?', app.root.MESSAGE_TYPE.WARNING)
         # End app.
         app.stop()
-        Window.close()
     
     def run_test_execute_reset(self, app, *args):
         '''
@@ -119,7 +114,6 @@ class TestStego(unittest.TestCase):
         app.root.display_image.reset_image.assert_called_once()
         # End app.
         app.stop()
-        Window.close()
 
     def run_test_on_save_button_click(self, app, *args, MockClass):
         '''
@@ -140,7 +134,6 @@ class TestStego(unittest.TestCase):
         MockClass().show_filechooser.assert_called_once()
         # End app.
         app.stop()
-        Window.close()
 
     def run_test_on_save(self, app, *args):
         '''
@@ -161,7 +154,6 @@ class TestStego(unittest.TestCase):
             '\nAre you sure you want to overwrite the image?', app.root.MESSAGE_TYPE.WARNING)
         # End app.
         app.stop()
-        Window.close()
 
     def run_test_on_save_2(self, app, *args):
         '''
@@ -184,7 +176,6 @@ class TestStego(unittest.TestCase):
         app.root.popup_user_notification.assert_called_once_with(\
             'The new image has been successfully saved!', app.root.MESSAGE_TYPE.INFO)
         app.stop()
-        Window.close()
 
     def run_test_execute_save(self, app, *args):
         '''
@@ -204,7 +195,6 @@ class TestStego(unittest.TestCase):
         self.assertEqual('path/test_image_3.jpeg', app.root.ids.main_image.source)
         self.assertEqual('decoded_msg', app.root.textfield_str)
         app.stop()
-        Window.close()
 
     def run_test_validate_image_name_true(self, app, *args):
         '''
@@ -219,7 +209,6 @@ class TestStego(unittest.TestCase):
         # Validate.
         self.assertEqual(True, result)
         app.stop()
-        Window.close()
 
     def run_test_validate_image_name_false(self, app, *args):
         '''
@@ -238,7 +227,6 @@ class TestStego(unittest.TestCase):
             ", app.root.MESSAGE_TYPE.ERROR)
         self.assertEqual(False, result)
         app.stop()
-        Window.close()
 
     def run_test_update_warning_btn_yes_1(self, app, *args):
         '''
@@ -260,7 +248,6 @@ class TestStego(unittest.TestCase):
         app.root.update_widgets_status.assert_called_once_with(True, False, False)
         # End app.
         app.stop()
-        Window.close()
 
     def run_test_update_warning_btn_yes_2(self, app, *args):
         '''
@@ -280,7 +267,6 @@ class TestStego(unittest.TestCase):
         app.root.update_widgets_status.assert_called_once_with(True, False, True)
         # End app.
         app.stop()
-        Window.close()
 
     def run_test_update_warning_btn_yes_3(self, app, *args):
         '''
@@ -298,7 +284,6 @@ class TestStego(unittest.TestCase):
         app.root.update_widgets_status.assert_called_once_with(False, True, False)
         # End app.
         app.stop()
-        Window.close()
 
     def run_test_update_widgets_status(self, app, *args):
         '''
@@ -316,7 +301,6 @@ class TestStego(unittest.TestCase):
         self.assertEqual(True, app.image_saver_dismiss)
         # End app.
         app.stop()
-        Window.close()
 
     def run_test_update_main_widgets_1(self, app, *args):
         '''
@@ -338,7 +322,6 @@ class TestStego(unittest.TestCase):
         self.assertEqual(True, app.root.encodable_bool)
         # End app.
         app.stop()
-        Window.close()
 
     def run_test_update_main_widgets_2(self, app, *args):
         '''
@@ -362,7 +345,6 @@ class TestStego(unittest.TestCase):
         self.assertEqual(True, app.root.encodable_bool)
         # End app.
         app.stop()
-        Window.close()
 
     def run_test_update_main_widgets_3(self, app, *args):
         '''
@@ -386,7 +368,6 @@ class TestStego(unittest.TestCase):
         self.assertEqual(False, app.root.encodable_bool)
         # End app.
         app.stop()
-        Window.close()
 
     def run_test_update_textfield_input(self, app, *args):
         '''
@@ -401,7 +382,6 @@ class TestStego(unittest.TestCase):
         self.assertEqual("somestring", app.root.ids.main_text_field.text)
         # End app.
         app.stop()
-        Window.close()
 
     @patch('stego.ImageChooserPopup')
     def test_on_open_button_click(self, MockClass):
