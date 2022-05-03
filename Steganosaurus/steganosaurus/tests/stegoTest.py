@@ -9,7 +9,7 @@ Final Project for CMSC 495.
 
 April 26, 2022
 
-Unit tests for Stenganosaurus application(stego.py).
+Unit tests for Steganosaurus application(stego.py).
 
 Reference: https://github.com/KeyWeeUsr/KivyUnitTest
            https://pypi.org/project/kivyunittest/

@@ -53,7 +53,7 @@ class MainWidget(GridLayout):
     # initialize with the default constructor
     display_image = ImageObject()
     # Define local variables with default values.
-    user_notification_msg = StringProperty('Note: Below displays the default decoded message.')
+    user_notification_msg = StringProperty('Note: The decoded message is displayed below.')
     warning_type, new_filepath, new_filename = '', '', ''
     encodable_bool = True
     maximum_char_count = NumericProperty(display_image.max_available_chars)
@@ -66,11 +66,11 @@ class MainWidget(GridLayout):
     def on_encode_button_click(self):
         """
         Call the method encode_image() and enable the reset button,
-        if the varaible encodable_bool is true;
+        if the variable encodable_bool is true;
         otherwise, popup warning message.
         """
         if (self.encodable_bool):
-            # Passing the text field input to ecode method.
+            # Passing the text field input to encode method.
             MainWidget.display_image.encode_image(self.ids.main_text_field.text)
             # Enable reset button, disable the textfield modification.
             self.update_widgets_status(False, True, False)
@@ -99,7 +99,7 @@ class MainWidget(GridLayout):
 
         # check if the image is loaded onto the screen
         # which means an image was chosen
-        if not MainWidget.display_image is None:
+        if MainWidget.display_image is not None:
             if not self.new_filename: # Validate if new file name exists.
                 # Assign current image file name.
                 self.new_filename = App.get_running_app().current_filename
@@ -250,13 +250,13 @@ class MainWidget(GridLayout):
         self.ids.main_image.source = MainWidget.display_image.filename
         self.textfield_str = MainWidget.display_image.decode_image()
         self.maximum_char_count = MainWidget.display_image.max_available_chars
-        if ((len(self.ids.main_text_field.text) == 0)):
+        if (len(self.ids.main_text_field.text) == 0):
             self.user_notification_msg = ''
             self.encodable_bool = True
-        elif((MainWidget.display_image.max_available_chars - len(self.ids.main_text_field.text) == 0)):
+        elif(MainWidget.display_image.max_available_chars - len(self.ids.main_text_field.text) == 0):
             self.user_notification_msg = 'Warning: Maximum encode character number has been reached.'
             self.encodable_bool = True
-        elif((MainWidget.display_image.max_available_chars - len(self.ids.main_text_field.text) < 0)):
+        elif(MainWidget.display_image.max_available_chars - len(self.ids.main_text_field.text) < 0):
             self.user_notification_msg ='Warning: Not encodable. '\
             'Maximum encode characters have exceeded by '\
             + str((len(self.ids.main_text_field.text) - MainWidget.display_image.max_available_chars))
@@ -332,7 +332,7 @@ class ImageChooserPopup(Popup):
             
             # Update main GUI title with the new file name
             App.get_running_app().current_image = \
-                str(((MainWidget.display_image.filename).split(App.get_running_app().file_spliter))[-1])
+                str(((MainWidget.display_image.filename).split(App.get_running_app().file_splitter))[-1])
             App.get_running_app().title = 'Steganosaurus - '+ App.get_running_app().current_image
             
             # Disable the reset button band enable the textfield.
@@ -352,21 +352,21 @@ class ImageChooserPopup(Popup):
 
 class MainFrame(App):
 
-    main_title, message, message_type, file_spliter, current_filename = '', '', '', '', ''
+    main_title, message, message_type, file_splitter, current_filename = '', '', '', '', ''
     reset_btn_disabled = BooleanProperty(True)
     textfield_disabled = BooleanProperty(False)
     image_saver_dismiss = BooleanProperty(False)
     valid_image_name = BooleanProperty(True)
 
     if platform.system() == 'Windows': # Windows
-        file_spliter = "\\"
-        current_filename = str(((MainWidget.display_image.filename).split(file_spliter))[-1])
-        # Windows dafault title, if the "\\" and "/" are mixed in the file path.
+        file_splitter = "\\"
+        current_filename = str(((MainWidget.display_image.filename).split(file_splitter))[-1])
+        # Windows default title, if the "\\" and "/" are mixed in the file path.
         if "/" in current_filename:
             current_filename = str(((MainWidget.display_image.filename).split("/"))[-1])
     else: # Mac os & linux
-        file_spliter = "/"
-        current_filename = str(((MainWidget.display_image.filename).split(file_spliter))[-1])
+        file_splitter = "/"
+        current_filename = str(((MainWidget.display_image.filename).split(file_splitter))[-1])
 
     # Assign Main GUI title with image file name.
     main_title = 'Steganosaurus - ' + current_filename 
