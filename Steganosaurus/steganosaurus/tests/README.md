@@ -11,7 +11,7 @@ The automated tests for this project are written for the Pytest framework. Pytes
 ## Running Tests
 
 1. Go to the `../Steganosaurus/` directory in your terminal. Note that the exact location depends on where you installed the application.
-2. Enter `pytest steganosaurus/tests/test.py -v steganosaurus/tests/stegoTest.py` into your terminal and press enter.
+2. Enter `pytest steganosaurus/tests/test.py steganosaurus/tests/stegoTest.py -v` into your terminal and press enter.
 There are currently 30 tests to run, so it may take a while. In some cases, testing can run for several minutes. When testing is complete, your terminal will display something similar to the following:
 
 ![screenshot](https://github.com/Jonmainhart/cmsc495_final/blob/66b8922d5058ea675f9955d88131efd232750ab8/Steganosaurus/steganosaurus/tests/terminal.png)
