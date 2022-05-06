@@ -37,6 +37,7 @@ We think *Steganosaurus* is easy to use, but we created it so we may be a bit bi
 3. Install the required dependencies with the following:
 
 `python3 -m pip install -r requirements.txt`
+
 4. Type `python3 steganosaurus` and press Enter to launch the application.
 
 ### Choose an Image
