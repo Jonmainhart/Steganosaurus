@@ -6,7 +6,7 @@ Capstone project for CMSC 495 at [University of Maryland Global Campus](https://
 
 Steganography is an information encoding technique that has been used throughout history to send secret messages without attracting attention. It is the practice of concealing a secret message in something that is not secret; a simple yet powerful technique for safeguarding and transmitting secret information.
 
-*Steganosaurus* is an image-based steganography application written in Python 3.9 that allows users to explore one of the fundamental concepts of steganography by hiding text inside of an image. It allows users to both encode secret conversations and reveal the secret data contained in an image. The result of an encoded image is a seemingly exact replica of the orginial image imperceptibly changed to contain a secret message. The purpose of this software is to allow users to have fun and experience steganography in a user-friendly way that anyone can enjoy.
+*Steganosaurus* is an image-based steganography application written in Python 3.9 that allows users to explore one of the fundamental concepts of steganography by hiding text inside of an image. It allows users to both encode secret conversations and reveal the secret data contained in an image. The result of an encoded image is a seemingly exact replica of the original image imperceptibly changed to contain a secret message. The purpose of this software is to allow users to have fun and experience steganography in a user-friendly way that anyone can enjoy.
 
 Why *Steganosaurus*? Steganosaurus is a portmanteau of *steganography* (which is what the program does) and *stegosaurus* (because dinosaurs are cool).
 
